@@ -4,7 +4,7 @@
 ## Objetivos Gerais
 O software terá como principal objetivo agilizar a realização do pedido, exibindo para o cliente o cardápio e detalhes completos dos produtos disponíveis para compra.
 
-## Tecnologia Utilizadas
+## Tecnologias Utilizadas
 O uso de tecnologias populares e bem consolidadas facilita o desenvolvimento e manutenção e também torna os sistemas compatíveis com a maioria dos dispositivos existentes no mercado.
 
 #### Sistema Web
