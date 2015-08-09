@@ -1,5 +1,5 @@
 # FastFood Delivery
-#### Trabalho de Conclusão de Curso - [Faculdade Integrado de Campo Mourão](grupointegrado.br)
+#### Trabalho de Conclusão de Curso - [Faculdade Integrado de Campo Mourão](http://grupointegrado.br)
 
 ## Objetivos Gerais
 O software terá como principal objetivo agilizar a realização do pedido, exibindo para o cliente o cardápio e detalhes completos dos produtos disponíveis para compra.
