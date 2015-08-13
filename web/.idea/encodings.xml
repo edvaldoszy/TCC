@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/composer.json" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/composer.lock" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/config/application.config.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/config/routes.config.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/module/Administrator/Controller/ImageController.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/module/Administrator/View/home/index.phtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/module/Administrator/View/layout/default.phtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/module/Application/Controller/IndexController.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/module/Application/View/home/index.phtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/module/Application/View/layout/default.phtml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/public_html/index.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vendor/Szy/File/FileSystem.php" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

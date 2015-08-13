@@ -1,0 +1,258 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    color: #444;
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+hr {
+    height: 0px;
+    border: none;
+    margin: 14px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* predefined classes */
+.clear:after, .container:after, .row:after {
+    content: " ";
+    display: block;
+    clear: both;
+}
+
+.tcenter { text-align: center; }
+.tright { text-align: right; }
+
+.box-center {
+    display: block;
+    margin: 0 auto;
+}
+
+.img-fluid {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.circle {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.container {
+    max-width: 100%;
+}
+
+.row {
+    padding-bottom: 1em;
+}
+
+.message {
+    color: #555;
+    margin: 0 0 10px 0;
+    padding: .6em .6em;
+    border: 1px solid transparent;
+    border-radius: 2px;
+}
+
+.message-info {
+    color: #776e13;
+    background-color: #f6f6c6;
+    border-color: #e6e783;
+}
+
+.message-success {
+    color: #107801;
+    background-color: #c5fdd6;
+    border-color: #7be39c;
+}
+
+.message-error {
+    color: #843b3b;
+    background-color: #ffd4d4;
+    border-color: #ce9494;
+}
+/* /predefined classes */
+
+
+/* forms */
+
+label {
+    display: block;
+    margin-bottom: 4px;
+}
+
+label span {
+    color: #cc0000;
+}
+
+button, input[type="button"], input[type="submit"],
+input[type="reset"], .btn {
+    display: inline-block;
+    padding: 4px 12px;
+    color: #333;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: #e7e7e7;
+    border: 1px solid transparent;
+    border-radius: 2px;
+}
+
+button:hover, input[type="button"]:hover, input[type="submit"]:hover,
+input[type="reset"]:hover, .btn:hover {
+    background-color: #d5d5d5;
+    text-decoration: none;
+}
+
+textarea, select, input[type="text"], input[type="password"],
+input[type="email"], input[type="number"] {
+    margin: 0;
+    padding: 4px 6px;
+    font: inherit;
+    background-color: #fff;
+    border: 1px solid silver;
+    border-radius: 2px;
+}
+
+select {
+    padding: 0 6px;
+}
+
+select option {
+    padding: 4px 6px;
+}
+
+textarea:focus, select:focus, input[type="text"]:focus, input[type="password"]:focus,
+input[type="email"]:focus, input[type="number"]:focus {
+    border-color: #59acfd;
+    outline: none;
+}
+
+textarea:disabled, input[type="text"]:disabled, input[type="password"]:disabled,
+input[type="email"]:disabled, input[type="number"]:disabled {
+    background-color: #f3f3f3;
+}
+
+.form-row {
+    margin-bottom: 10px;
+}
+
+.select-field {
+    padding: 0 .4em;
+}
+
+.select-field option {
+    padding: .6em .6em;
+}
+
+.btn-default {
+    color: #f7f7f7 !important;
+    background-color: #479ccf !important;
+}
+
+.btn-success {
+    color: #f7f7f7 !important;
+    background-color: #57a757 !important;
+    /*border-color: #3c953c !important;*/
+}
+
+.btn-success:hover {
+    background-color: #54b354 !important;
+}
+
+.btn-cancel {
+    color: #f7f7f7 !important;
+    background-color: #d24c4a !important;
+    /*border-color: #be3f3d !important;*/
+}
+
+.btn-cancel:hover {
+    background-color: #d85a58 !important;
+}
+
+.form-full-width textarea, select, .form-full-width input[type="text"], .form-full-width input[type="password"],
+.form-full-width input[type="email"], .form-full-width input[type="number"] {
+    width: 100%;
+}
+/* /forms */
+
+/* modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .8);
+}
+
+.modal-window {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    margin: 0 0 0 0;
+    background-color: #fff;
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, .8);
+    -ms-box-shadow: 0 0 3px rgba(0, 0, 0, .8);
+    -o-box-shadow: 0 0 3px rgba(0, 0, 0, .8);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .8);
+    overflow: hidden;
+}
+
+.modal .modal-header {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 34px;
+    padding: 8px 8px 0 0;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 0 1px #e8e8e8;
+}
+
+.modal .modal-wrap {
+    position: absolute;
+    overflow-x: hidden;
+    overflow-y: auto;
+    left: 0;
+    top: 34px;
+    right: 0;
+    bottom: 0;
+    padding: .8em;
+}
+
+.modal .modal-content {
+    width: 80%;
+    height: 100%;
+    float: left;
+}
+
+.modal .modal-sidebar {
+    width: 20%;
+    float: right;
+}
+/* /modal */
+
+.caixa-login {
+    float: left;
+    width: 45%;
+    text-align: right;
+}
+
+.caixa-cadastro {
+    float: right;
+    width: 45%;
+}
