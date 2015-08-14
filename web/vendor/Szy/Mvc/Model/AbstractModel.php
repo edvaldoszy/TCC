@@ -39,6 +39,15 @@ abstract class AbstractModel implements Model
     }
 
     /**
+     * Debug mode
+     * @param bool $status
+     */
+    public function debug($status)
+    {
+        $this->getConnection()->debug = boolval($status);
+    }
+
+    /**
      * @param \PDOStatement $stmt
      * @param ArrayIterator $values
      */
@@ -72,7 +81,6 @@ abstract class AbstractModel implements Model
     }
 
     /**
-     * @param string $table
      * @param array $columns
      * @param array $where
      * @param array $arguments
@@ -81,7 +89,7 @@ abstract class AbstractModel implements Model
      * @param int $offset
      * @return ResultSet
      */
-    public function select($table, array $columns = null, $where = null, array $arguments = null, $order = null, $limit = null, $offset = null)
+    public function select(array $columns = null, $where = null, array $arguments = null, $order = null, $limit = null, $offset = null)
     {
         $columns = is_null($columns) ? "*" : implode(", ", $columns);
         $where = is_null($where) ? "" : "WHERE {$where}";
@@ -89,31 +97,29 @@ abstract class AbstractModel implements Model
         $limit = is_null($limit) ? "" : "LIMIT {$limit}";
         $offset = is_null($offset) ? "" : "OFFSET {$offset}";
 
-        $sql = "SELECT {$columns} FROM {$table} {$where} {$order} {$limit} {$offset}";
+        $sql = "SELECT {$columns} FROM {$this->table} {$where} {$order} {$limit} {$offset}";
         return $this->query($sql, $arguments);
     }
 
     /**
-     * @param string $table
      * @param array|null $columns
      * @param null $where
      * @param array|null $arguments
      * @param string $order
      * @return Record
      */
-    public function row($table, array $columns = null, $where = null, array $arguments = null, $order = null)
+    public function row(array $columns = null, $where = null, array $arguments = null, $order = null)
     {
-        $rset = $this->select($table, $columns, $where, $arguments, $order, 1);
+        $rset = $this->select($this->table, $columns, $where, $arguments, $order, 1);
         return $rset->first();
     }
 
     /**
-     * @param $table
      * @param array $arguments
      * @return bool
      * @throws \Exception
      */
-    public function insert($table, array $arguments)
+    public function insert(array $arguments)
     {
         $columns = new ArrayIterator(array_keys($arguments));
         $values = new ArrayIterator(array_values($arguments));
@@ -129,7 +135,7 @@ abstract class AbstractModel implements Model
             $columns->next();
         }
 
-        $sql = "INSERT INTO `{$table}` ({$cols}) VALUES ({$args})";
+        $sql = "INSERT INTO `{$this->table}` ({$cols}) VALUES ({$args})";
         $stmt = $this->getConnection()->prepare($sql);
         $this->bindValues($stmt, $values);
         return $stmt->execute();
@@ -141,13 +147,12 @@ abstract class AbstractModel implements Model
     }
 
     /**
-     * @param string $table
      * @param array $arguments
      * @param string $where
      * @param array $whereArguments
      * @return bool
      */
-    public function update($table, array $arguments, $where = null, array $whereArguments = null)
+    public function update(array $arguments, $where = null, array $whereArguments = null)
     {
         $columns = new ArrayIterator(array_keys($arguments));
         $av = is_null($whereArguments) ? array_values($arguments) : array_merge(array_values($arguments), $whereArguments);
@@ -160,22 +165,21 @@ abstract class AbstractModel implements Model
             $columns->next();
         }
 
-        $sql = "UPDATE `{$table}` SET {$cols} {$where}";
+        $sql = "UPDATE `{$this->table}` SET {$cols} {$where}";
         $stmt = $this->getConnection()->prepare($sql);
         $this->bindValues($stmt, $values);
         return $stmt->execute();
     }
 
     /**
-     * @param $table
      * @param null $where
      * @param array $arguments
      * @return bool
      */
-    public function delete($table, $where = null, array $arguments = null)
+    public function delete($where = null, array $arguments = null)
     {
         $where = is_null($where) ? "" : "WHERE {$where}";
-        $sql = "DELETE FROM `{$table}` {$where}";
+        $sql = "DELETE FROM `{$this->table}` {$where}";
         $stmt = $this->getConnection()->prepare($sql);
         $this->bindValues($stmt, new ArrayIterator($arguments));
 

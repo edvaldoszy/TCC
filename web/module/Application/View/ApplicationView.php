@@ -2,7 +2,7 @@
 
 namespace Application\View;
 
-define("VIEWPATH", __DIR__);
+define("VIEW_PATH", __DIR__);
 
 use Szy\Mvc\View\AbstractView;
 
