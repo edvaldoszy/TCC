@@ -69,6 +69,11 @@ class FileSystem
         return @chdir($path);
     }
 
+    public static function isFile($path)
+    {
+        return @is_file($path);
+    }
+
     public static function getSeparator()
     {
         return DIRECTORY_SEPARATOR;
