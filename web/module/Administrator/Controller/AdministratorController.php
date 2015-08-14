@@ -11,8 +11,9 @@ abstract class AdministratorController extends AbstractController
      */
     public function init()
     {
-        $user = $this->getSession()->read('logged_user');
-        if ($user == null)
+        $usuario = $this->getSession()->read('usuario_logado');
+
+        if ($usuario == null)
             $this->redirect('/login');
     }
 
