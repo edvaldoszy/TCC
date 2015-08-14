@@ -15,6 +15,10 @@ class LoginController extends AbstractController
      */
     public function indexAction()
     {
+        $login = $this->getPost('login', FILTER_SANITIZE_STRING);
+        $senha = $this->getPost('senha', FILTER_SANITIZE_STRING);
+
+
         return new AdministratorView('login/index');
     }
 

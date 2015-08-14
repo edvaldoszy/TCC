@@ -1,6 +1,6 @@
 <?php
 
-namespace BLZ\Util;
+namespace Szy\Util;
 
 use Szy\Mvc\Application;
 
@@ -9,15 +9,19 @@ class DateTime extends \DateTime
     /**
      * @param string $time
      */
-    public function __construct($time = "now")
+    public function __construct($time = 'now')
     {
-        $config = Application::getConfig("time_zone");
-        parent::__construct($time, new \DateTimeZone($config["time_zone"]));
+        parent::__construct($time, new \DateTimeZone(Application::getConfig('time_zone')));
     }
 
+    /**
+     * @param string $format
+     * @param string $time
+     * @return DateTime
+     */
     public static function createFromFormat($format, $time)
     {
-        $date = \DateTime::createFromFormat($format, $time);
+        $date = parent::createFromFormat($format, $time);
         return new self($date->format("Y-m-d"));
     }
 

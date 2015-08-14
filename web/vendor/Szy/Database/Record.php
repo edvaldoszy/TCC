@@ -30,7 +30,7 @@ class Record
      */
     public function getBool($column)
     {
-        return (bool) $this->getValue($column);
+        return boolval($this->getValue($column));
     }
 
     /**
@@ -48,6 +48,6 @@ class Record
      */
     public function getDate($column)
     {
-        return !is_null($this->getValue($column)) ? new DateTime($this->getValue($column)) : null;
+        return $this->getValue($column) != null ? new DateTime($this->getValue($column)) : null;
     }
 }
