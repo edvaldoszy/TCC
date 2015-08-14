@@ -94,11 +94,11 @@ class Application
      */
     public static function init($routes, array $config = null)
     {
-        if (null == self::$instance)
-            self::$instance = new self($routes);
-
         if (null != $config)
             self::$config = $config;
+
+        if (null == self::$instance)
+            self::$instance = new self($routes);
     }
 
 

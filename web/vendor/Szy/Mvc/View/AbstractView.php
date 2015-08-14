@@ -2,67 +2,40 @@
 
 namespace Szy\Mvc\View;
 
-use ArrayObject;
+use Szy\File\FileSystem;
+use Szy\Util\Date;
 
-defined("VIEWPATH") or exit("Necessario definir a constante VIEWPATH no arquivo");
+defined("VIEW_PATH") or exit("Necessario definir a constante VIEWPATH no arquivo");
 
 abstract class AbstractView implements View
 {
     /**
-     * @var string $viewFile
+     * @var string
      */
     private $view;
 
     /**
-     * @var string $layout
+     * @var string
      */
     private $layout;
 
     /**
-     * Default html language
-     *
-     * @var string $language
+     * @var string
      */
-    protected $language = "Pt-BR";
+    protected $language = 'Pt-BR';
 
     /**
-     * Default html charset
-     *
-     * @var string $charset
+     * @var string
      */
-    protected $charset = "UTF-8";
+    protected $charset = 'UTF-8';
 
     /**
-     * Page title
-     *
-     * @var string $title
+     * @var string
      */
-    protected $title = "Home";
+    protected $title = 'Home';
 
     /**
-     * List of css files
-     * @var array $stylesheet
-     */
-    private $stylesheet = array();
-
-    /**
-     * List of javascript files
-     *
-     * @var array $javascript
-     */
-    private $javascript = array();
-
-    /**
-     * List of parameters
-     *
-     * @var array $attribute
-     */
-    protected $attribute = array();
-
-    /**
-     * List of values
-     *
-     * @var ArrayObject $values
+     * @var array
      */
     protected $values;
 
@@ -71,22 +44,40 @@ abstract class AbstractView implements View
      * @param string $layout
      * @throws Exception\ViewException
      */
-    public function __construct($view, $layout = "default")
+    public function __construct($view, $layout = 'default')
     {
-        $this->view = sprintf("%s/%s.phtml", VIEWPATH, $view);
-        if (!file_exists($this->view))
+        $this->view = VIEW_PATH . "/{$view}.phtml";
+        if (FileSystem::isFile($this->view) === false)
             throw new Exception\ViewException;("View file not found");
 
-        $this->layout = sprintf("%s/layout/%s.phtml", VIEWPATH, $layout);
-        if (!file_exists($this->layout))
+        $this->layout = VIEW_PATH . "/layout/{$layout}.phtml";
+        if (FileSystem::isFile($this->layout) === false)
             throw new Exception\ViewException("Layout file not found");
 
-        $this->values = new ArrayObject();
+        $this->values = array();
     }
 
     /**
-     * Retorna a linguagem do documento Html (padrão Pt-BR)
-     *
+     * @param string $date
+     * @return string
+     */
+    public function en2pt($date)
+    {
+        $date = new Date($date);
+        return $date->format("d/m/Y");
+    }
+
+    /**
+     * @param string $date
+     * @return string
+     */
+    public function pt2en($date)
+    {
+        $date = new Date($date);
+        return $date->format("Y-m-d");
+    }
+
+    /**
      * @return string
      */
     public function getLanguage()
@@ -95,8 +86,6 @@ abstract class AbstractView implements View
     }
 
     /**
-     * Retorna a codificação do documento Html (padrão UTF-8)
-     *
      * @return string
      */
     public function getCharset()
@@ -105,65 +94,7 @@ abstract class AbstractView implements View
     }
 
     /**
-     * Adiciona um documento CSS a página
-     *
-     * @param $href Endereço do arquivo CSS
-     * @param string $media Qual media será aplicado (padrão all)
-     * @return $this
-     */
-    public function addStyleSheet($href, $media = "all")
-    {
-        $this->stylesheet[] = array(
-            "href" => $href,
-            "media" => $media
-        );
-        return $this;
-    }
-
-    /**
-     * Obtem a lista de arquivos CSS adicionados
-     */
-    public function getStyleSheet()
-    {
-        $out = "";
-        foreach($this->stylesheet as $stylesheet)
-        {
-            $out .= "<link rel=\"stylesheet\" media=\"{$stylesheet['media']}\" href=\"{$stylesheet['href']}\">\n";
-        }
-        echo $out;
-    }
-
-    /**
-     * Adiciona o documento JavaScript a página
-     *
-     * @param $src Endereço do arquivo javaScript
-     * @param string $type Tipo de arquivo (padrão text/javascript)
-     * @return $this
-     */
-    public function addJavaScript($src, $type = "text/javascript")
-    {
-        $this->javascript[] = array(
-            "src" => $src,
-            "type" => $type
-        );
-        return $this;
-    }
-
-    /**
-     * Obtem a lista de arquivos JavaScript adicionados
-     */
-    public function getJavaScript()
-    {
-        $out = "";
-        foreach($this->javascript as $javascript)
-        {
-            $out .= "<script type=\"{$javascript['type']}\" src=\"{$javascript['src']}\"></script>\n";
-        }
-        echo $out;
-    }
-
-    /**
-     * Modifica o título do documento
+     * @param string $title
      */
     public function setTitle($title)
     {
@@ -171,8 +102,6 @@ abstract class AbstractView implements View
     }
 
     /**
-     * Retorna o título do documento
-     *
      * @return string
      */
     public function getTitle()
@@ -181,30 +110,12 @@ abstract class AbstractView implements View
     }
 
     /**
-     * Inclui o arquivo com o conteúdo
+     * @return string
      */
     public function getBody()
     {
-        extract($this->attribute, EXTR_OVERWRITE);
-        include $this->view;
-    }
-
-    /**
-     * @param string $name
-     * @return null|mixed
-     */
-    public function getAttribute($name)
-    {
-        return isset($this->attribute[$name]) ? $this->attribute[$name] : null;
-    }
-
-    /**
-     * @param string $name
-     * @param string $value
-     */
-    public function setAttribute($name, $value)
-    {
-        $this->attribute[$name] = $value;
+        extract($this->values, EXTR_OVERWRITE);
+        include_once $this->view;
     }
 
     /**
@@ -224,7 +135,8 @@ abstract class AbstractView implements View
     }
 
     /**
-     * @param array $values
+     * @param string $name
+     * @param mixed $values
      */
     public function setValue($name, $values)
     {
@@ -232,36 +144,19 @@ abstract class AbstractView implements View
     }
 
     /**
-     * @param $date
-     * @return string
-     */
-    public function en2pt($date)
-    {
-        $date = new DateTime($date);
-        return $date->format("d/m/Y");
-    }
-
-    /**
-     * @param $date
-     * @return string
-     */
-    public function pt2en($date)
-    {
-        $date = new DateTime($date);
-        return $date->format("Y-m-d");
-    }
-
-    /**
-     * Retorna o conteúdo devidamente formatado para exibição no browser
-     *
      * @return string
      */
     public function __toString()
     {
-        ob_start(); // Ativa o buffer de saída e não mostra o conteúdo na tela
+        /* Turn on output buffering */
+        ob_start();
         include $this->layout;
-        $content = ob_get_contents(); // Pega o conteúdo do include
+
+        /** @var string $content get include contents */
+        $content = ob_get_contents();
         ob_end_clean();
-        return $content; // Retorna o conteúdo sem mostar nada na tela
+
+        /* Return content to browser */
+        return $content;
     }
 } 

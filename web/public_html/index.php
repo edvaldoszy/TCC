@@ -12,4 +12,6 @@ define('PUBLIC_PATH', BASE_PATH . '/public_html');
 
 FileSystem::chdir(BASE_PATH);
 
-Application::init(require_once(BASE_PATH . '/config/routes.config.php'), require_once(BASE_PATH . '/config/application.config.php'));
+$routes = require_once(BASE_PATH . '/config/routes.config.php');
+$config = require_once(BASE_PATH . '/config/application.config.php');
+Application::init($routes, $config);

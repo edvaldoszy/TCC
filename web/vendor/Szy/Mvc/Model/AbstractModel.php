@@ -35,6 +35,15 @@ abstract class AbstractModel implements Model
     }
 
     /**
+     * Debug mode
+     * @param bool $status
+     */
+    public function debug($status)
+    {
+        $this->getConnection()->debug = boolval($status);
+    }
+
+    /**
      * @param \PDOStatement $stmt
      * @param ArrayIterator $values
      */

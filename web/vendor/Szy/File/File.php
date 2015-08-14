@@ -12,9 +12,13 @@ class File implements Serializable
      */
     protected $path;
 
+    /**
+     * @param string $path
+     * @throws Exception\FileNotFoundException
+     */
     function __construct($path)
     {
-        if (!is_file($path))
+        if (FileSystem::isFile($path) === false)
             throw new Exception\FileNotFoundException("No such file {$path}");
 
         $this->path = $path;

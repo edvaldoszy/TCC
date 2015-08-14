@@ -4,7 +4,7 @@ namespace Szy\Database;
 
 class PDOConnection extends \PDO implements Connection
 {
-    private $debug = false;
+    public $debug = false;
 
     /**
      * @param string $host
