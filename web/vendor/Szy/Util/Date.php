@@ -1,10 +1,10 @@
 <?php
 
-namespace BLZ\Util;
+namespace Szy\Util;
 
 use Szy\Mvc\Application;
 
-class DateTime extends \DateTime
+class Date extends \DateTime
 {
     /**
      * @param string $time
