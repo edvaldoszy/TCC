@@ -34,7 +34,7 @@ class LoginController extends AbstractController
                 $this->validate($login, $senha);
                 $this->redirect('/admin');
             } catch (ValidationException $ex) {
-                $view->setValue('message', new Message($ex->getMessage()));
+                $view->setValue('message', new Message($ex->getMessage(), Message::MSG_ERROR));
             }
 
             $view->setValue('login', $login);
@@ -50,7 +50,7 @@ class LoginController extends AbstractController
 
         $view = new AdministratorView('login/index');
         $view->setTitle('Sair');
-        $view->setAttribute('message', new Message('Você saiu do sistema', Message::MSG_INFO));
+        $view->setValue('message', new Message('Você saiu do sistema', Message::MSG_INFO));
         return $view;
     }
 
