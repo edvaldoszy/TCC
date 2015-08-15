@@ -7,6 +7,26 @@ use Szy\Session\Storage as SessionStorage;
 abstract class AbstractController implements Controller
 {
     /**
+     * Get method
+     */
+    const METHOD_GET = 'GET';
+
+    /**
+     * Post method
+     */
+    const METHOD_POST = 'POST';
+
+    /**
+     * Delete method
+     */
+    const METHOD_DELETE = 'DELETE';
+
+    /**
+     * Put method
+     */
+    const METHOD_PUT = 'PUT';
+
+    /**
      * @var SessionStorage
      */
     private static $session;
@@ -40,12 +60,20 @@ abstract class AbstractController implements Controller
     }
 
     /**
-     * Returns true if the request is post
+     * @param string $method
+     * @return bool
+     */
+    private function isMethod($method)
+    {
+        return $this->getServerParam('REQUEST_METHOD') === $method;
+    }
+
+    /**
      * @return bool
      */
     public function isPost()
     {
-        return $_SERVER['REQUEST_METHOD'] === 'POST';
+        return $this->isMethod(self::METHOD_POST);
     }
 
     /**
