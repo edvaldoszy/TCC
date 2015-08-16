@@ -29,42 +29,42 @@ class LoginController extends AbstractController
             $senha = $this->getPost('senha', FILTER_SANITIZE_STRING);
 
             try {
-                $this->validar($login, $senha);
+                $usuario = $this->validar($login, $senha);
+
+                if ($method == 'json') {
+                    $output = new Output();
+                    $output->code = Output::CODE_OK;
+                    $output->data = $usuario;
+                    return $output;
+                }
+
+                $this->getSession()->write('usuario_logado', $usuario);
                 $this->redirect('/admin');
             } catch (ValidationException $ex) {
+                if ($method == 'json') {
+                    $output = new Output();
+                    $output->code = Output::CODE_ERR;
+                    $output->message = $ex->getMessage();
+
+                    return $output;
+                }
                 $view->setValue('message', new Message($ex->getMessage(), Message::MSG_ERROR));
+                $view->setValue('login', $login);
+                $view->setValue('senha', $senha);
+            } catch (\PDOException $ex) {
+                if ($method == 'json') {
+                    $output = new Output();
+                    $output->code = Output::CODE_ERR;
+                    $output->message = $ex->getMessage();
+
+                    return $output;
+                }
+                $view->setValue('message', new Message($ex->getMessage(), Message::MSG_ERROR));
+                $view->setValue('login', $login);
+                $view->setValue('senha', $senha);
             }
-
-            $view->setValue('login', $login);
-            $view->setValue('senha', $senha);
         }
-
         return $view;
-    }
-
-    /**
-     * @param string $action
-     * @return string
-     */
-    public function jsonAction($action = null)
-    {
-        $output = new Output();
-
-        if ($this->isPost()) {
-            $login = $this->getPost('login', FILTER_SANITIZE_STRING);
-            $senha = $this->getPost('senha', FILTER_SANITIZE_STRING);
-
-            try {
-                $usuario = $this->validar($login, $senha);
-                $output->status = 'OK';
-                $output->data = $usuario;
-            } catch (ValidationException $ex) {
-                $output->status = 'ERR';
-                $output->message = $ex->getMessage();
-            }
-        }
-
-        return $output;
     }
 
     public function sairAction()
@@ -88,9 +88,7 @@ class LoginController extends AbstractController
         if ($res->count() < 1)
             throw new ValidationException('Login ou senha inválida');
 
-        $usuario = $res->first();
-        $this->getSession()->write('usuario_logado', $usuario);
-        return $usuario;
+        return $res->first();
     }
 
 }
