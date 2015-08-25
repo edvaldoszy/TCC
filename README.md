@@ -19,5 +19,5 @@ O armazenamento de integridade dos dados é feito pelo SGBD [MySQL](https://www.
 #### Sistema Mobile
 Todo o sistema Mobile será desenvolvido para a plataforma [Android](http://www.android.com). Utilizando a linguagem [XML](https://pt.wikipedia.org/wiki/XML) para o desenvolvimento das interfaces e linguagem de programação [Java](http://www.java.com) para interação com o WebService.
 
-## Modelagem de Bando de dados
+## Modelagem de Banco de dados
 ![image](https://raw.githubusercontent.com/edvaldoszy/TCC/master/doc/diagramas/MER%20Web.png)
