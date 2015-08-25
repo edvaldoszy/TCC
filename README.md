@@ -14,7 +14,7 @@ A lógica de negócio será desenvolvida utilizando a linguagem de programação
 
 WebService é o recurso disponível para comunicação entre o aplicativo mobile com o sistema da empresa. Utilizando o protocolo [HTTP](https://pt.wikipedia.org/wiki/Hypertext_Transfer_Protocol) e comunicação [Rest](https://pt.wikipedia.org/wiki/REST) que não depende dos detalhes de implementação, temos assim a posibilidade de comunicação e integração com uma infinidade de outros sistemas e tecnologias.
 
-O armazenamento de integridade dos dados é feito pelo SGBD [MySQL](https://www.mysql.com). Mantido e atualizado pela Oracle, é o sistema gerenciador de bando de dados mais comum utilizado em aplicações Web baseadas na linguagem de programação PHP.
+O armazenamento de integridade dos dados é feito pelo SGBD [MySQL](https://www.mysql.com). Mantido e atualizado pela Oracle, é o sistema gerenciador de banco de dados mais comum utilizado em aplicações Web baseadas na linguagem de programação PHP.
 
 #### Sistema Mobile
 Todo o sistema Mobile será desenvolvido para a plataforma [Android](http://www.android.com). Utilizando a linguagem [XML](https://pt.wikipedia.org/wiki/XML) para o desenvolvimento das interfaces e linguagem de programação [Java](http://www.java.com) para interação com o WebService.
