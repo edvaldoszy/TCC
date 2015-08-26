@@ -5,16 +5,28 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.edvaldotsi.fastfood.model.Produto;
 import com.edvaldotsi.fastfood.request.RequestInterface;
 import com.edvaldotsi.fastfood.request.ServerRequest;
+import com.edvaldotsi.fastfood.request.ServerResponse;
+
+import org.json.JSONException;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RequestInterface {
+
+    private ListView lvProdutos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        lvProdutos = (ListView) findViewById(R.id.lvProdutos);
     }
 
     @Override
@@ -39,14 +51,27 @@ public class MainActivity extends AppCompatActivity implements RequestInterface 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void afterRequest(String json) {
-        System.out.println(json);
+    private void buildList(List<Produto> produtos) {
+        ArrayAdapter<Produto> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, produtos);
+        lvProdutos.setAdapter(adapter);
     }
 
-    public void sendLoginRequest(View v) {
+    private List<Produto> parseJsonProduto(String response) {
+        return null;
+    }
 
+    @Override
+    public void afterRequest(ServerResponse response) {
+        try {
+            buildList(response.getProdutos());
+            System.out.println(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendRequest(View v) {
         ServerRequest request = new ServerRequest(this, this);
-        request.execute("http://192.168.115.99/login/");
+        request.execute("http://192.168.0.16/admin/index/mobile");
     }
 }
