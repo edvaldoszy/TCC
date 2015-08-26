@@ -4,57 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "994c1614340de8227f6fb85a4d84133a",
+    "hash": "bf13fa00c0fbb1fa5d5c4b73c9f7daa3",
     "packages": [
         {
-            "name": "eventviva/php-image-resize",
-            "version": "1.4.0",
+            "name": "edvaldoszy/php-library",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/eventviva/php-image-resize.git",
-                "reference": "bd99be79a3b0b2fa42371cee5027d5b773fc4b66"
+                "url": "https://github.com/edvaldoszy/php-library.git",
+                "reference": "a3ee6f14c20f8b3ec32e3f616e06ab3214007285"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eventviva/php-image-resize/zipball/bd99be79a3b0b2fa42371cee5027d5b773fc4b66",
-                "reference": "bd99be79a3b0b2fa42371cee5027d5b773fc4b66",
+                "url": "https://api.github.com/repos/edvaldoszy/php-library/zipball/a3ee6f14c20f8b3ec32e3f616e06ab3214007285",
+                "reference": "a3ee6f14c20f8b3ec32e3f616e06ab3214007285",
                 "shasum": ""
             },
             "require": {
-                "ext-gd": "*",
-                "php": ">=5.3.0"
+                "php": ">=5.5"
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "src"
-                ]
+                "psr-4": {
+                    "Szy\\": "src/Szy/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "GPL-2.0"
             ],
             "authors": [
                 {
-                    "name": "Aditya Patadia",
-                    "homepage": "http://aditya.patadia.org/"
+                    "name": "Edvaldo Szymonek",
+                    "email": "edvaldoszy@gmail.com"
                 }
             ],
-            "description": "PHP class to re-size and scale images",
-            "homepage": "https://github.com/eventviva/php-image-resize",
-            "keywords": [
-                "image",
-                "php",
-                "resize",
-                "scale"
-            ],
-            "time": "2015-03-24 07:04:14"
+            "description": "Biblioteca PHP para desenvolvimento de aplicações no padrão MVC",
+            "time": "2015-08-20 19:57:10"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "edvaldoszy/php-library": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

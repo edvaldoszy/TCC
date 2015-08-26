@@ -1,14 +1,12 @@
 {
-    "require": {
-        "php": ">=5.5",
-        "eventviva/php-image-resize": "1.4.*"
-    },
+  "autoload": {
+      "psr-4": {
+          "": "module/"
+      }
+  },
 
-    "autoload": {
-        "psr-4": {
-            "Szy\\": "vendor/Szy/",
-
-            "": "module/"
-        }
-    }
+  "require": {
+      "php": ">=5.5",
+      "edvaldoszy/php-library": "dev-master"
+  }
 }
