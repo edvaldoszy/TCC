@@ -5,12 +5,14 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Created by Edvaldo on 20/08/2015.
@@ -21,13 +23,38 @@ public class ServerRequest extends AsyncTask<String, String, String> {
     private RequestInterface task;
     private ProgressDialog dialog;
 
-    private String cookie;
+    private static String cookie;
 
-    public ServerRequest(Context context, RequestInterface requestTask) {
+    private HttpURLConnection con;
+
+    private HashMap<String, String> data;
+
+    public ServerRequest(Context context, RequestInterface task) {
         this.context = context;
-        this.task = requestTask;
+        this.task = task;
+
+        this.data = new HashMap<>();
 
         CookieHandler.setDefault(new CookieManager());
+    }
+
+    public void addData(String key, String value) {
+        data.put(key, value);
+    }
+
+    private String getPostData()
+    {
+        StringBuilder out = new StringBuilder();
+        for (String name : data.keySet()) {
+            if (out.length() > 0)
+                out.append("&");
+
+            out.append(name);
+            out.append("=");
+            out.append(data.get(name));
+        }
+
+        return out.toString();
     }
 
     @Override
@@ -42,14 +69,27 @@ public class ServerRequest extends AsyncTask<String, String, String> {
     protected String doInBackground(String... params) { // Execute in other Thread
         try {
             URL url = new URL(params[0]);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con = (HttpURLConnection) url.openConnection();
             con.setDoOutput(true);
             con.setRequestMethod("POST");
+
+            if (data.size() > 0) {
+                DataOutputStream data = new DataOutputStream(con.getOutputStream());
+                data.writeBytes(getPostData());
+            }
+
+            if (cookie != null) {
+                con.addRequestProperty("Cookie", cookie);
+            } else {
+                String session = con.getHeaderField("Set-Cookie");
+                if (session != null)
+                    cookie = session;
+            }
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
             return reader.readLine();
         } catch (IOException ex) {
-            dialog.setMessage(ex.getMessage());
-            dialog.dismiss();
+            ex.printStackTrace();
         }
         return null;
     }
@@ -60,8 +100,9 @@ public class ServerRequest extends AsyncTask<String, String, String> {
     }
 
     @Override
-    protected void onPostExecute(String json) { // Execute after other Thread
-        task.afterRequest(json);
+    protected void onPostExecute(String response) { // Execute after other Thread
+        task.afterRequest(new ServerResponse(response));
         dialog.dismiss();
+        con = null;
     }
 }

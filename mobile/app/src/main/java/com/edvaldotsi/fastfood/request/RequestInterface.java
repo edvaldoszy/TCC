@@ -5,5 +5,5 @@ package com.edvaldotsi.fastfood.request;
  */
 public interface RequestInterface {
 
-    public void afterRequest(String json);
+    public void afterRequest(ServerResponse response);
 }
