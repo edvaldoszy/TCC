@@ -1,7 +1,9 @@
 RewriteEngine On
 
-RewriteRule ^(_upload/img/.*\.(jpe?g|png|gif))$ index.php?_url=image/crop&path=$1 [QSA,L]
+ErrorDocument 404 /
+
+RewriteRule ^(_upload/img/.*\.(jpe?g|png|gif))$ index.php?REQUEST_URI=/image/$1 [QSA,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?_url=$1 [QSA,L]
+RewriteRule . index.php?REQUEST_URI=%{REQUEST_URI} [QSA,L]
