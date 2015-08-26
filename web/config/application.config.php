@@ -2,12 +2,12 @@
 
 return array(
 
-    'time_zone' => 'America/Sao_Paulo',
+    "time_zone" => 'America/Sao_Paulo',
 
-    'database' => array(
-        'host' => 'localhost',
-        'user' => 'root',
-        'pass' => '',
-        'name' => 'fast_food'
+    "database" => array(
+        "host" => 'localhost',
+        "user" => 'root',
+        "pass" => '',
+        "name" => 'fast_food'
     )
 );

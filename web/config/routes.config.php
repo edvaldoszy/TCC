@@ -3,18 +3,12 @@
 return array(
 
     "/admin" => array(
-        'controller' => 'Administrator\Controller\IndexController'
+        "controller" => 'Application\Controller\AdminController'
     ),
 
     "/login" => array(
-        'controller' => 'Administrator\Controller\LoginController'
+        "controller" => 'Application\Controller\LoginController'
     ),
 
-    "/image" => array(
-        'controller' => 'Administrator\Controller\ImageController'
-    ),
-
-    "/" => array(
-        'controller' => 'Application\Controller\IndexController'
-    )
+    "default_controller" => 'Application\Controller\IndexController'
 );
