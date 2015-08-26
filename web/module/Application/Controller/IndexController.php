@@ -2,18 +2,17 @@
 
 namespace Application\Controller;
 
-use Application\View\ApplicationView;
 use Szy\Mvc\Controller\AbstractController;
+use Szy\Mvc\View\View;
 
 class IndexController extends AbstractController
 {
+    /**
+     * @return View
+     */
     public function indexAction()
     {
-        return new ApplicationView("home/index");
+        echo "INDEX INDEX";
     }
 
-    public function __call($action, $param)
-    {
-        var_dump($action, $param);
-    }
-} 
+}
