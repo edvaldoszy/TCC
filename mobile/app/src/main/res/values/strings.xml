@@ -8,4 +8,8 @@
     <string name="lbl_email">E-mail</string>
     <string name="lbl_senha">Senha</string>
     <string name="lbl_entrar">Entrar</string>
+
+    <string name="server_host">http://192.168.0.100</string>
+    <string name="title_activity_details">DetailsActivity</string>
+    <string name="title_activity_detalhe">DetalheActivity</string>
 </resources>

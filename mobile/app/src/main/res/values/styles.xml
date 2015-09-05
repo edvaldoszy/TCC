@@ -1,8 +1,18 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="Theme.FastFood" parent="Theme.AppCompat.NoActionBar">
+
+        <!-- Default action bar background color -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+        <!-- Status bar color -->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+
+        <!-- widgets color -->
+        <item name="colorAccent">@color/colorAccent</item>
+
+
     </style>
 
 </resources>
