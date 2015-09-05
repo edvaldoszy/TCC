@@ -1,32 +1,27 @@
 package com.edvaldotsi.fastfood;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.edvaldotsi.fastfood.model.Produto;
-import com.edvaldotsi.fastfood.request.RequestInterface;
-import com.edvaldotsi.fastfood.request.ServerRequest;
-import com.edvaldotsi.fastfood.request.ServerResponse;
 
-import org.json.JSONException;
+public class MainActivity extends AppCompatActivity {
 
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity implements RequestInterface {
-
-    private ListView lvProdutos;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lvProdutos = (ListView) findViewById(R.id.lvProdutos);
+        toolbar = (Toolbar) findViewById(R.id.mainToolbar);
+        toolbar.setTitle("FastFood");
+        toolbar.setSubtitle("Produtos");
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -38,40 +33,16 @@ public class MainActivity extends AppCompatActivity implements RequestInterface 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Produto p = new Produto();
+                p.setNome("X Bacon");
+                Intent i = new Intent(this, DetalheActivity.class);
+                startActivity(i);
+                break;
         }
 
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void buildList(List<Produto> produtos) {
-        ArrayAdapter<Produto> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, produtos);
-        lvProdutos.setAdapter(adapter);
-    }
-
-    private List<Produto> parseJsonProduto(String response) {
-        return null;
-    }
-
-    @Override
-    public void afterRequest(ServerResponse response) {
-        try {
-            buildList(response.getProdutos());
-            System.out.println(response);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void sendRequest(View v) {
-        ServerRequest request = new ServerRequest(this, this);
-        request.execute("http://192.168.0.16/admin/index/mobile");
+        return true;
     }
 }
