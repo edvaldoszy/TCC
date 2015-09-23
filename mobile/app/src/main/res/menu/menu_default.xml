@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/act_salvar" android:title="@string/lb_salvar"
+        android:icon="@drawable/ic_salvar" app:showAsAction="always" />
+</menu>

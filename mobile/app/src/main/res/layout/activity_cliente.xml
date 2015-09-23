@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.edvaldotsi.fastfood.ClienteActivity"
+    android:orientation="vertical">
+
+    <include android:id="@+id/toolbar_main" layout="@layout/toolbar_main" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        style="@style/Theme.FastFood.Activity">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/edt_nome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName|textCapWords"
+            app:met_floatingLabel="normal"
+            app:met_helperText=""
+            android:hint="@string/lb_nome"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/edt_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            app:met_floatingLabel="normal"
+            app:met_helperText=""
+            android:hint="@string/lb_email"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/edt_senha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            app:met_floatingLabel="normal"
+            app:met_helperText=""
+            android:hint="@string/lb_senha"/>
+
+    </LinearLayout>
+
+</LinearLayout>
