@@ -27,7 +27,7 @@ public class ProdutoAdapter extends AbstractAdapter<Produto> {
         
         ((TextView) view.findViewById(R.id.tvNome)).setText(produto.getNome());
         ((TextView) view.findViewById(R.id.tvValor)).setText("R$ " + df.format(produto.getValor()));
-        ((TextView) view.findViewById(R.id.tvDescricao)).setText("Hamburguer, bacon, cebola, tomate, ervilha, milho e presunto");
+        ((TextView) view.findViewById(R.id.tvDescricao)).setText(produto.getDescricao());
 
         return view;
     }
