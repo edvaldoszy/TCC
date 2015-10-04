@@ -1,66 +1,58 @@
 package com.edvaldotsi.fastfood;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.edvaldotsi.fastfood.model.Usuario;
-import com.edvaldotsi.fastfood.request.RequestInterface;
-import com.edvaldotsi.fastfood.request.ServerRequest;
+import com.edvaldotsi.fastfood.model.Cliente;
+import com.edvaldotsi.fastfood.request.Request;
 import com.edvaldotsi.fastfood.request.ServerResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity implements RequestInterface {
+public class LoginActivity extends ToolbarActivity {
 
     private EditText edtEmail;
     private EditText edtSenha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setLayout(R.layout.activity_login);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        getToolbar().setTitle(getString(R.string.title_activity_login));
 
         edtEmail = (EditText) findViewById(R.id.edtEmail);
         edtSenha = (EditText) findViewById(R.id.edtSenha);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    public void btnLoginAction(View v) {
+        startActivity(new Intent(this, MainActivity.class));
+        /*
+        if (edtEmail.getText().length() < 1 || edtSenha.getText().length() < 1) {
+            Toast.makeText(this, "Preencha os dois campos", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        return super.onOptionsItemSelected(item);
+        ServerRequest request = new ServerRequest(this, this);
+        request.addData("email", edtEmail.getText().toString());
+        request.addData("senha", edtSenha.getText().toString());
+        request.execute(getResources().getString(R.string.server_host) + "/login/index/mobile");
+        */
     }
 
     @Override
-    public void afterRequest(ServerResponse response) {
+    public void onResponseSuccess(String message, ServerResponse response) {
+        /*
         try {
             JSONObject json = response.getJson();
             String status = json.getString("status");
-            if (status.equals("OK")) {
+            if (status.equals("d")) {
                 JSONObject data = json.getJSONObject("data");
-                Usuario u = new Usuario();
+                Cliente u = new Cliente();
                 u.setCodigo(data.getInt("codigo"));
                 u.setNome(data.getString("nome"));
                 u.setEmail(data.getString("email"));
@@ -75,17 +67,6 @@ public class LoginActivity extends AppCompatActivity implements RequestInterface
         } catch (JSONException ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
-    }
-
-    public void btnLoginAction(View v) {
-        if (edtEmail.getText().length() < 1 || edtSenha.getText().length() < 1) {
-            Toast.makeText(this, "Preencha os dois campos", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ServerRequest request = new ServerRequest(this, this);
-        request.addData("email", edtEmail.getText().toString());
-        request.addData("senha", edtSenha.getText().toString());
-        request.execute("http://192.168.0.16/login/index/mobile");
+        */
     }
 }

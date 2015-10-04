@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.edvaldotsi.fastfood.fragment.NavigationDrawerFragment"
+    android:background="@color/navigation_drawer_background"
+    android:orientation="vertical"
+    android:elevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/navigation_drawer_header_background"
+        android:elevation="3dp"
+        android:padding="18dp">
+
+        <ImageView
+            android:id="@+id/ivPerfil"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/tvPerfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:paddingLeft="16dp"
+            android:textColor="@color/gray" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lvNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:paddingTop="8dp">
+
+    </ListView>
+
+</LinearLayout>

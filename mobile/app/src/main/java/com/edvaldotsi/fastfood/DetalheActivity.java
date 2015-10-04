@@ -1,39 +1,50 @@
 package com.edvaldotsi.fastfood;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
+import com.edvaldotsi.fastfood.adapter.DetalheAdapter;
 import com.edvaldotsi.fastfood.model.Produto;
+import com.edvaldotsi.fastfood.request.PostData;
+import com.edvaldotsi.fastfood.request.Request;
+import com.edvaldotsi.fastfood.request.ServerRequest;
+import com.edvaldotsi.fastfood.request.ServerResponse;
 
-public class DetalheActivity extends AppCompatActivity {
-
-    private Toolbar toolbar;
+public class DetalheActivity extends ToolbarActivity {
 
     private Produto produto;
 
+    private ListView lvItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setLayout(R.layout.activity_detalhe);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalhe);
-
-        toolbar = (Toolbar) findViewById(R.id.mainToolbar);
-        toolbar.setTitle("Detalhes do produto");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getToolbar().setTitle(getString(R.string.title_activity_detalhe));
 
         try {
             produto = (Produto) getIntent().getSerializableExtra("produto");
-            toolbar.setTitle(produto.getNome());
-        } catch (NullPointerException ex) {}
+            getToolbar().setTitle(produto.getNome());
 
+            PostData data = new PostData();
+            data.put("produto", String.valueOf(produto.getCodigo()));
+
+            ServerRequest request = new ServerRequest(this, this);
+            request.setPostData(data);
+            request.execute(getResources().getString(R.string.server_host) + "produtos/itens");
+
+        } catch (NullPointerException ex) {
+            showMessage("Erro ao carregar informações do produto");
+            finish();
+        }
+
+        lvItem = (ListView) findViewById(R.id.lvItem);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detalhe, menu);
         return true;
     }
@@ -47,5 +58,15 @@ public class DetalheActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    public void onResponseSuccess(String message, ServerResponse response) {
+        try {
+            lvItem.setAdapter(new DetalheAdapter(this, response.getItens(produto)));
+        } catch (Exception ex) {
+            showMessage(ex.getMessage());
+            ex.printStackTrace();
+        }
     }
 }
