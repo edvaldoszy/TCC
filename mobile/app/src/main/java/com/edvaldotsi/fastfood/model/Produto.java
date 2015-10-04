@@ -7,16 +7,28 @@ import java.io.Serializable;
  */
 public class Produto implements Serializable {
 
-    private Integer codigo;
+    private int codigo;
     private String nome;
-    private Double valor;
+    private float valor;
+    private int tipo;
+    private boolean ativo;
     private Categoria categoria;
+    private String descricao;
 
-    public Integer getCodigo() {
+    public Produto() {
+
+    }
+
+    public Produto(int codigo, String nome) {
+        this.codigo = codigo;
+        this.nome = nome;
+    }
+
+    public int getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(Integer codigo) {
+    public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
 
@@ -28,12 +40,28 @@ public class Produto implements Serializable {
         this.nome = nome;
     }
 
-    public Double getValor() {
+    public Float getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    public void setValor(float valor) {
         this.valor = valor;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public Categoria getCategoria() {
@@ -42,6 +70,14 @@ public class Produto implements Serializable {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     @Override

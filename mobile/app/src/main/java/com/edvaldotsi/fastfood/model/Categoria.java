@@ -7,14 +7,14 @@ import java.io.Serializable;
  */
 public class Categoria implements Serializable {
 
-    private Integer codigo;
+    private int codigo;
     private String nome;
 
-    public Integer getCodigo() {
+    public int getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(Integer codigo) {
+    public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
 
