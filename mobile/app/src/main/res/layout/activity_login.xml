@@ -11,16 +11,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        style="@style/Theme.FastFood.Activity">
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/default_margin_bottom"
+            android:inputType="textEmailAddress"
             app:met_floatingLabel="normal"
-            android:hint="@string/lb_email"
-            android:inputType="textEmailAddress"/>
+            app:met_helperText=""
+            android:hint="@string/lb_email" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtSenha"
@@ -28,13 +30,16 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/default_margin_bottom"
             android:inputType="textPassword"
-            android:hint="@string/lb_senha"/>
+            app:met_floatingLabel="normal"
+            app:met_helperText=""
+            android:hint="@string/lb_senha" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/lb_entrar"
             android:onClick="btnLoginAction"/>
+
     </LinearLayout>
 
 </LinearLayout>

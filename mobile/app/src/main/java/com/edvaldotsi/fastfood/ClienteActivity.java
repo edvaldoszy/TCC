@@ -4,9 +4,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.edvaldotsi.fastfood.dao.ClienteDAO;
+import com.edvaldotsi.fastfood.dao.ContaDAO;
 import com.edvaldotsi.fastfood.model.Cliente;
 import com.edvaldotsi.fastfood.request.PostData;
-import com.edvaldotsi.fastfood.request.Request;
 import com.edvaldotsi.fastfood.request.ServerRequest;
 import com.edvaldotsi.fastfood.request.ServerResponse;
 import com.edvaldotsi.fastfood.validator.EmailValidator;
@@ -14,12 +15,12 @@ import com.edvaldotsi.fastfood.validator.EmptyValidator;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rengwuxian.materialedittext.validation.RegexpValidator;
 
-import org.json.JSONException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
-public class ClienteActivity extends ToolbarActivity implements Request {
+public class    ClienteActivity extends ToolbarActivity {
 
     private MaterialEditText edtNome, edtEmail, edtSenha;
-
     private Cliente cliente;
 
     @Override
@@ -29,18 +30,24 @@ public class ClienteActivity extends ToolbarActivity implements Request {
         getToolbar().setTitle("Minhas informações");
 
         edtNome = (MaterialEditText) findViewById(R.id.edt_nome);
-        //edtNome.setText(cliente.getNome());
-        edtNome.addValidator(new EmptyValidator("Preencha o campo nome"));
+        edtNome.addValidator(new EmptyValidator("Informe seu nome completo"));
         edtNome.setValidateOnFocusLost(true);
 
         edtEmail = (MaterialEditText) findViewById(R.id.edt_email);
-        //edtEmail.setText(cliente.getEmail());
         edtEmail.addValidator(new EmailValidator("Endereço de e-mail inválido"));
         edtEmail.setValidateOnFocusLost(true);
 
         edtSenha = (MaterialEditText) findViewById(R.id.edt_senha);
-        edtSenha.addValidator(new RegexpValidator("Esta senha é muito fraca (min 8)", "\\w{8,}"));
-        edtSenha.setValidateOnFocusLost(true);
+
+        try {
+            cliente = ContaDAO.getCliente();
+            edtNome.setText(cliente.getNome());
+            edtEmail.setText(cliente.getEmail());
+        } catch (NullPointerException ex) {
+            showMessage("Algo deu errado! Tente novamente mais tarde :(");
+            ex.printStackTrace();
+            finish();
+        }
     }
 
     @Override
@@ -51,41 +58,44 @@ public class ClienteActivity extends ToolbarActivity implements Request {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 break;
+
             case R.id.act_salvar:
-                salvarCliente();
+                salvar();
                 break;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
-    private void salvarCliente() {
-        if (!edtNome.validate() || !edtEmail.validate() || !edtSenha.validate())
+    private void salvar() {
+        if (!edtNome.validate() || !edtEmail.validate())
             return;
 
         PostData data = new PostData();
-        data.put("nome", edtNome.getText().toString());
-        data.put("email", edtEmail.getText().toString());
-        data.put("senha", edtSenha.getText().toString());
-
-        ServerRequest request = new ServerRequest(this, this);
-        request.setPostData(data);
-        request.execute(getResources().getString(R.string.server_host) + "clientes/cadastrar");
-    }
-
-    @Override
-    public void onRequestSuccess(ServerResponse response) {
         try {
-            showMessage(response.getMessage());
-            finish();
-        } catch (JSONException e) {}
+            data.put("nome", URLEncoder.encode(edtNome.getText().toString(), "UTF-8"));
+            data.put("email", edtEmail.getText().toString());
+
+            if (!"".equals(edtSenha.getText().toString()))
+                data.put("senha", ContaDAO.md5(edtSenha.getText().toString()));
+
+            ServerRequest request = new ServerRequest(this, this, ServerRequest.METHOD_POST);
+            request.send("/clientes/" + cliente.getCodigo(), data);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            showMessage("Falha na codificação dos caracteres");
+        }
     }
 
     @Override
-    public void onRequestError(Exception ex) {
-
+    public void onResponseSuccess(ServerResponse response) {
+        showMessage("Informações salvas com sucesso");
+        ContaActivity.updated = false;
+        finish();
     }
 }

@@ -1,7 +1,7 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="Theme.FastFood" parent="Theme.AppCompat.NoActionBar">
+    <!-- Application theme -->
+    <style name="Theme.FastFood" parent="Theme.AppCompat.Light.NoActionBar">
 
         <!-- Default action bar background color -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -9,10 +9,42 @@
         <!-- Status bar color -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 
-        <!-- widgets color -->
+        <!-- Widgets color -->
         <item name="colorAccent">@color/colorAccent</item>
 
+        <!-- Window background color -->
+        <item name="android:windowBackground">@color/windowBackground</item>
+    </style>
 
+    <style name="Theme.FastFood.Activity" parent="Theme.FastFood">
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+    <!-- Toolbar theme -->
+    <style name="Theme.FastFood.Toolbar" parent="ThemeOverlay.AppCompat.Dark">
+    </style>
+
+    <style name="Theme.FastFood.ListView">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+
+        <item name="android:focusableInTouchMode">false</item>
+    </style>
+
+    <style name="Theme.FastFood.RecycleView">
+
+    </style>
+
+    <style name="Theme.FastFood.Widget" />
+
+    <style name="Theme.FastFood.Widget.Label" parent="Theme.FastFood.Widget">
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
     </style>
 
 </resources>

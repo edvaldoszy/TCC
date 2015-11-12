@@ -5,4 +5,7 @@
     <item android:id="@+id/actPesquisa" android:title="@string/lb_search"
         android:icon="@drawable/abc_ic_search_api_mtrl_alpha" app:showAsAction="always|collapseActionView"
         android:actionViewClass="android.support.v7.widget.SearchView"/>
+
+    <item android:id="@+id/action_finalizar" android:title="Finalizar pedido"
+        android:icon="@drawable/ic_carrinho" app:showAsAction="ifRoom" />
 </menu>

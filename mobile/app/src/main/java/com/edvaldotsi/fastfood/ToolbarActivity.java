@@ -6,18 +6,21 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.edvaldotsi.fastfood.request.Request;
+import com.edvaldotsi.fastfood.request.ServerRequest;
 import com.edvaldotsi.fastfood.request.ServerResponse;
+import com.google.gson.Gson;
 
 /**
  * Created by Edvaldo on 05/09/2015.
  */
-public abstract class ToolbarActivity extends AppCompatActivity implements Request {
+public abstract class ToolbarActivity extends AppCompatActivity implements ServerRequest.RequestListener {
 
     private Toolbar toolbar;
     private int layout;
 
     private Toast toast;
+
+    protected Gson gson;
 
     public void setLayout(int resource) {
         layout = resource;
@@ -38,21 +41,25 @@ public abstract class ToolbarActivity extends AppCompatActivity implements Reque
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        gson = new Gson();
     }
 
-    protected void showMessage(String str) {
+    public void showMessage(String str) {
         toast.setText(str);
         toast.show();
     }
 
     @Override
-    public void onRequestError(Exception ex) {
-        showMessage("onRequestError");
+    public void onResponseError(ServerResponse response) {
+        showMessage(response.getMessage());
+        Log.e("RESPONSE ERROR", response.getMessage());
+        System.out.println(response.getOutput());
     }
 
     @Override
-    public void onResponseError(String message, ServerResponse response) {
-        showMessage("onResponseError");
-        Log.e("RESPONSE ERROR", message);
+    public void onRequestError(ServerResponse response) {
+        showMessage(response.getMessage());
+        Log.e("REQUEST ERROR", response.getMessage());
+        System.out.println(response.getOutput());
     }
 }

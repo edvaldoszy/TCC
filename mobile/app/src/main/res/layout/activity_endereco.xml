@@ -18,7 +18,7 @@
             android:id="@+id/edt_logradouro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPostalAddress"
+            android:inputType="textPostalAddress|textCapSentences"
             app:met_floatingLabel="normal"
             app:met_helperText=""
             android:hint="@string/lb_logradouro"/>
@@ -27,7 +27,6 @@
             android:id="@+id/edt_numero"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapCharacters"
             app:met_floatingLabel="normal"
             app:met_helperText=""
             android:hint="@string/lb_numero"/>
@@ -36,10 +35,15 @@
             android:id="@+id/edt_bairro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="text|textCapSentences"
             app:met_floatingLabel="normal"
             app:met_helperText=""
             android:hint="@string/lb_bairro"/>
+
+        <Spinner
+            android:id="@+id/spnCidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

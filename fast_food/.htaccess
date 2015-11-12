@@ -1,0 +1,20 @@
+Options -Indexes
+
+<IfModule mod_deflate.c>
+    <filesMatch "\.(js|css|html|php)$">
+        SetOutputFilter DEFLATE
+    </filesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(js|css|svg|woff|ttf)$">
+        Header set Cache-Control max-age=604800
+    </FilesMatch>
+</IfModule>
+
+RewriteEngine On
+#RewriteRule ^upload/img/(.*\.(jpe?g|png|gif))$ index.php?REQUEST_URI=/image&path=$1 [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php?REQUEST_URI=%{REQUEST_URI} [QSA,L]

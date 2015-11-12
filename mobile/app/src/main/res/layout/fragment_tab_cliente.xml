@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    tools:context="com.edvaldotsi.fastfood.fragment.TabClienteFragment"
+    android:orientation="vertical"
+    android:paddingTop="16dp">
+
+    <ImageView
+        android:id="@+id/img_perfil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/edvaldo"
+        android:contentDescription="@string/ds_imagem_perfil"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:elevation="1dp"
+        android:background="@drawable/round_layout"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#222222"
+            style="@style/Theme.FastFood.Widget.Label"
+            android:text="@string/lb_nome"/>
+
+        <TextView
+            android:id="@+id/tv_nome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            style="@style/Theme.FastFood.Widget.Label"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#222222"
+            style="@style/Theme.FastFood.Widget.Label"
+            android:text="@string/lb_email"/>
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            style="@style/Theme.FastFood.Widget.Label" />
+
+    </LinearLayout>
+</LinearLayout>

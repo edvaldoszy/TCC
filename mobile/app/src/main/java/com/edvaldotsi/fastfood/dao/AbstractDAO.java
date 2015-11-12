@@ -32,6 +32,7 @@ public abstract class AbstractDAO<O> extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(res.getString(R.string.SQL_CREATE_TABLE_CLIENTE));
         db.execSQL(res.getString(R.string.SQL_CREATE_TABLE_CIDADE));
+        db.execSQL(res.getString(R.string.SQL_CREATE_TABLE_CONTATO));
     }
 
     @Override
@@ -54,6 +55,7 @@ public abstract class AbstractDAO<O> extends SQLiteOpenHelper {
         while (c.moveToNext())
             list.add(createObject(c));
 
+        c.close();
         return list;
     }
 }

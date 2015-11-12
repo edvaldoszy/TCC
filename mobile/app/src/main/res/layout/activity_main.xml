@@ -11,12 +11,10 @@
 
         <include android:id="@+id/toolbar_main" layout="@layout/toolbar_main" />
 
-        <ListView
-            android:id="@+id/lvProdutos"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_produto"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </ListView>
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
     

@@ -11,21 +11,26 @@
         android:layout_height="wrap_content"
         android:background="@color/navigation_drawer_header_background"
         android:elevation="3dp"
-        android:padding="18dp">
+        android:padding="18dp"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/ivPerfil"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="@dimen/default_margin_bottom"/>
 
         <TextView
-            android:id="@+id/tvPerfil"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvPerfilNome"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:paddingLeft="16dp"
+            android:textColor="@color/gray" />
+
+        <TextView
+            android:id="@+id/tvPerfilEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textColor="@color/gray" />
 
     </LinearLayout>

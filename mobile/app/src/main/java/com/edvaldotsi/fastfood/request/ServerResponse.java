@@ -1,56 +1,67 @@
 package com.edvaldotsi.fastfood.request;
 
-import com.edvaldotsi.fastfood.model.Produto;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Edvaldo on 23/08/2015.
  */
-public class ServerResponse implements Serializable {
+public class ServerResponse {
+
+    public static final String STATUS_OK = "OK";
+    public static final String STATUS_ERROR = "ERROR";
+
+    private int code;
+    private String message;
+    private String output;
 
     private JSONObject json;
+    private Gson gson;
 
-    public ServerResponse(String s) {
-        try {
-            this.json = new JSONObject(s);
-        } catch (JSONException ex) {}
+    public ServerResponse (int code, String message){
+        gson = new Gson();
+        this.code = code;
+        this.message = message;
     }
 
-    public String getStatus() throws JSONException {
-        return json.getString("status");
+    public ServerResponse(int code, String message, String output) {
+        this(code, message);
+        this.output = output;
     }
 
-    public JSONObject getJson() {
+    public <T> T decode(String json, Class<T> type) {
+        return gson.fromJson(json, type);
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    private JSONObject parse() throws JSONException {
+        if (json == null)
+            json = new JSONObject(output);
+
         return json;
     }
 
-    public List<Produto> getProdutos() throws JSONException {
-        List<Produto> l = new ArrayList<>();
-
-        if (json.getString("status").equals("OK")) {
-            JSONArray data = json.getJSONArray("data");
-            for (int n = 0; n < data.length(); n++) {
-                JSONObject i = data.getJSONObject(n);
-
-                Produto p = new Produto();
-                p.setCodigo(i.getInt("codigo"));
-                p.setNome(i.getString("nome"));
-                p.setValor(i.getDouble("valor"));
-                l.add(p);
-            }
-        }
-        return l;
+    public JSONObject getJSONObject(String name) throws JSONException {
+        return parse().getJSONObject(name);
     }
 
-    @Override
-    public String toString() {
-        return json.toString();
+    public JSONArray getJSONArray(String name) throws JSONException {
+        return parse().getJSONArray(name);
     }
 }

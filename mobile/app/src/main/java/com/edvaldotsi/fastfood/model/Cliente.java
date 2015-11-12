@@ -12,6 +12,7 @@ public class Cliente implements Serializable {
     private String email;
     private String senha;
     private boolean admin;
+    private String imagem;
 
     public Cliente() {}
 
@@ -58,5 +59,9 @@ public class Cliente implements Serializable {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public String getImagem() {
+        return imagem;
     }
 }

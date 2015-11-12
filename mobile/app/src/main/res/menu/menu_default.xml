@@ -1,6 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/act_adicionar" android:title="@string/lb_adicionar"
+        android:icon="@drawable/ic_add" app:showAsAction="ifRoom" android:visible="false" />
+
+    <item android:id="@+id/act_alterar" android:title="@string/lb_alterar"
+        android:icon="@drawable/ic_alterar" app:showAsAction="ifRoom" android:visible="false" />
+
     <item android:id="@+id/act_salvar" android:title="@string/lb_salvar"
-        android:icon="@drawable/ic_salvar" app:showAsAction="always" />
+        android:icon="@drawable/ic_salvar" app:showAsAction="ifRoom" />
 </menu>

@@ -1,0 +1,13 @@
+{
+  "autoload": {
+      "psr-4": {
+          "": "module/"
+      }
+  },
+
+  "require": {
+      "php": ">=5.5",
+      "edvaldoszy/php-library": "dev-master",
+      "eventviva/php-image-resize" : "1.5.*"
+  }
+}

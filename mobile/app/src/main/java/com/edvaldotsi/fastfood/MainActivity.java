@@ -3,8 +3,11 @@ package com.edvaldotsi.fastfood;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.widget.DrawerLayout;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,27 +18,37 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.edvaldotsi.fastfood.adapter.ProdutoAdapter;
-import com.edvaldotsi.fastfood.dao.ClienteDAO;
+import com.edvaldotsi.fastfood.dao.ContaDAO;
 import com.edvaldotsi.fastfood.fragment.NavigationDrawerFragment;
+import com.edvaldotsi.fastfood.model.Carrinho;
 import com.edvaldotsi.fastfood.model.Cliente;
+import com.edvaldotsi.fastfood.model.Pedido;
 import com.edvaldotsi.fastfood.model.Produto;
-import com.edvaldotsi.fastfood.request.Request;
 import com.edvaldotsi.fastfood.request.ServerRequest;
 import com.edvaldotsi.fastfood.request.ServerResponse;
-import com.edvaldotsi.fastfood.util.RoundedImage;
+import com.edvaldotsi.fastfood.util.CircleTransform;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends ToolbarActivity {
 
-    private NavigationDrawerFragment navigation;
+    private SharedPreferences settings;
 
     private Cliente cliente;
 
+    private NavigationDrawerFragment navigation;
+
     private ImageView ivPerfil;
-    private TextView tvPerfil;
-    private ListView lvProdutos;
+    private TextView tvPerfilNome;
+    private TextView tvPerfilEmail;
+    private RecyclerView rvProduto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +63,19 @@ public class MainActivity extends ToolbarActivity {
         ServerRequest request = new ServerRequest(this, this);
         request.send("/produtos");
 
-        //ClienteDAO dao = new ClienteDAO(this);
-        //cliente = dao.getUsuarioLogado();
-        cliente = new Cliente(1, "Edvaldo Szymonek");
+        try {
+            cliente = ContaDAO.getCliente();
 
-        ivPerfil.setImageDrawable(new RoundedImage(this, R.drawable.edvaldo));
-        tvPerfil.setText(cliente.getNome());
+            String imagem = getResources().getString(R.string.server_host) + cliente.getImagem();
+            Picasso.with(this).load(imagem).error(R.drawable.sem_imagem).resize(140, 140).centerCrop().transform(new CircleTransform()).into(ivPerfil);
+            tvPerfilNome.setText(cliente.getNome());
+            tvPerfilEmail.setText(cliente.getEmail());
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+        }
+
+        settings = getSharedPreferences("cliente", 0);
+        PedidoActivity.carrinho = new Carrinho(new Pedido(ContaDAO.getCliente()), null);
     }
 
     private void init() {
@@ -69,12 +89,15 @@ public class MainActivity extends ToolbarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        startActivity(new Intent(MainActivity.this, ContaActivity.class));
+                        telaConta();
                         break;
                     case 1:
                         Intent i = new Intent(MainActivity.this, ContaActivity.class);
                         i.putExtra("tabIndex", 1);
                         startActivity(i);
+                        break;
+                    case 4:
+                        sair();
                         break;
                 }
                 navigation.close();
@@ -82,31 +105,45 @@ public class MainActivity extends ToolbarActivity {
         });
     }
 
+    private void sair() {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove("email");
+        editor.remove("senha");
+        editor.apply();
+        editor.commit();
+        finish();
+    }
+
+    private void telaConta() {
+        startActivity(new Intent(this, ContaActivity.class));
+    }
+
     private void getViews() {
         ivPerfil = (ImageView) findViewById(R.id.ivPerfil);
-        tvPerfil = (TextView) findViewById(R.id.tvPerfil);
-        lvProdutos = (ListView) findViewById(R.id.lvProdutos);
+        tvPerfilNome = (TextView) findViewById(R.id.tvPerfilNome);
+        tvPerfilEmail = (TextView) findViewById(R.id.tvPerfilEmail);
+        rvProduto = (RecyclerView) findViewById(R.id.rv_produto);
     }
 
-    private void detalhes(Produto p) {
-        Intent i = new Intent(this, DetalheActivity.class);
+    private void telaDetalhes(Produto p) {
+        Intent i = new Intent(this, ProdutoActivity.class);
         i.putExtra("produto", p);
         startActivity(i);
-    }
-
-    public void pesquisar(Intent intent) {
-        if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-
-            getToolbar().setTitle("Pesquisar");
-            getToolbar().setSubtitle(query);
-        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        pesquisar(intent);
+        if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            getToolbar().setTitle("Pesquisar");
+            getToolbar().setSubtitle(query);
+
+            ServerRequest request = new ServerRequest(this, this);
+            request.addParam("busca", query);
+            request.send("/produtos");
+        }
     }
 
     @Override
@@ -122,22 +159,61 @@ public class MainActivity extends ToolbarActivity {
             case R.id.actPesquisa:
                 onSearchRequested();
                 break;
+
+            case R.id.action_finalizar:
+                finalizarPedido();
+                break;
         }
 
         return true;
     }
 
+    private void finalizarPedido() {
+
+        startActivity(new Intent(this, PedidoActivity.class));
+
+        /*
+        PostData data = new PostData();
+        data.put("data", gson.toJson(carrinho));
+        System.out.println(gson.toJson(carrinho));
+
+        ServerRequest request = new ServerRequest(this, new ServerRequest.RequestListener() {
+            @Override
+            public void onResponseSuccess(ServerResponse response) {
+                carrinho = new Carrinho(new Pedido(cliente), null);
+                showMessage("Pedido finalizado e enviado");
+            }
+
+            @Override
+            public void onResponseError(ServerResponse response) {}
+
+            @Override
+            public void onRequestError(ServerResponse response) {}
+        }, ServerRequest.METHOD_POST);
+        request.send("/pedidos", data);
+        */
+    }
+
     @Override
-    public void onResponseSuccess(String message, ServerResponse response) {
+    public void onResponseSuccess(ServerResponse response) {
+
+        Gson gson = new Gson();
         try {
-            lvProdutos.setAdapter(new ProdutoAdapter(this, response.getProdutos()));
-            lvProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            Produto[] arr = gson.fromJson(response.getJSONArray("data").toString(), Produto[].class);
+            List<Produto> produtos = Arrays.asList(arr);
+
+            StaggeredGridLayoutManager llm = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+            llm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+            rvProduto.setLayoutManager(llm);
+            ProdutoAdapter adapter = new ProdutoAdapter(this, produtos) {
+
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    detalhes((Produto) parent.getItemAtPosition(position));
+                protected void onItemClickListener(int position, int layoutPosition) {
+                    telaDetalhes(this.getItem(position));
                 }
-            });
-        } catch (Exception ex) {
+            };
+            rvProduto.setAdapter(adapter);
+        } catch (JSONException ex) {
             showMessage(ex.getMessage());
         }
     }
@@ -151,13 +227,15 @@ public class MainActivity extends ToolbarActivity {
                 "Minha conta",
                 "Meus endereços",
                 "Meus favoritos",
-                "Configurações"
+                "Configurações",
+                "Sair"
         };
         private int[] images = {
                 R.drawable.ic_conta,
                 R.drawable.ic_endereco,
                 R.drawable.ic_favorito,
-                R.drawable.ic_configuracao
+                R.drawable.ic_configuracao,
+                R.drawable.ic_conta
         };
 
         public NavigationAdapter(Context context, NavigationDrawerFragment navigation) {

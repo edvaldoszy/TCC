@@ -1,15 +1,125 @@
 <resources>
+    <string name="facebook_app_id">1665240653711113</string>
+
     <string name="app_name">FastFood</string>
+
+    <string name="lb_search">Pesquisar</string>
+
+    <string name="api_host">http://fastfood.edvaldotsi.com/api</string>
+    <string name="server_host">http://fastfood.edvaldotsi.com</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="title_activity_login">Fazer login</string>
+    <string name="lb_email">E-mail</string>
+    <string name="lb_senha">Senha</string>
+    <string name="lb_entrar">Entrar</string>
+
+    <string name="title_activity_detalhe">Detalhes do produto</string>
+
+    <string name="title_activity_conta">Minha Conta</string>
+    <string name="lb_salvar">Salvar</string>
+    <string name="lb_nome">Nome completo</string>
+    <string name="title_activity_pesquisa">PesquisaActivity</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="title_activity_login">Fazer login</string>
-    <string name="lbl_email">E-mail</string>
-    <string name="lbl_senha">Senha</string>
-    <string name="lbl_entrar">Entrar</string>
+    <string-array name="tabs_title">
+        <item>INFORMAÇÕES</item>
+        <item>ENDEREÇOS</item>
+        <item>CONTATOS</item>
+    </string-array>
 
-    <string name="server_host">http://192.168.0.100</string>
-    <string name="title_activity_details">DetailsActivity</string>
-    <string name="title_activity_detalhe">DetalheActivity</string>
+    <string name="SQL_CREATE_TABLE_CLIENTE">
+        CREATE TABLE cliente (
+            codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            nome VARCHAR(45) NOT NULL,
+            email VARCHAR(100) NOT NULL,
+            senha VARCHAR(60) NOT NULL
+        );
+    </string>
+    <string name="SQL_CREATE_TABLE_CIDADE">
+        CREATE TABLE cidade (
+            codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            nome VARCHAR(60) NOT NULL,
+            uf CHAR(2) NOT NULL
+        );
+    </string>
+
+    <string name="SQL_CREATE_TABLE_PRODUTO">
+        CREATE TABLE produto (
+            codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            nome VARCHAR(60) NOT NULL,
+            valor NUMERIC(8,2) NOT NULL,
+            tipo CHAR(1) NOT NULL,
+            ativo CHAR(1) NOT NULL,
+            categoria INTEGER NOT NULL,
+            atualizado DATETIME NOT NULL
+        );
+    </string>
+    <string name="SQL_CREATE_TABLE_PRODUTO_ITEM">
+        CREATE TABLE produto_item (
+            produto INTEGER NOT NULL,
+            item INTEGER NOT NULL,
+            quantidade NUMERIC(8,2) NOT NULL,
+            adicional CHAR(1) NOT NULL,
+            valor NUMERIC(8,2) NOT NULL,
+            CONSTRAINT pk_produto_item PRIMARY KEY (produto, item),
+            CONSTRAINT fk_produto_item FOREIGN KEY (produto, item) REFERENCES produto (codigo, codigo)
+        );
+    </string>
+    <string name="SQL_CREATE_TABLE_CONTATO">
+        CREATE TABLE contato (
+            codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            telefone VARCHAR(16) NOT NULL,
+            cliente INTEGER REFERENCES cliente (codigo) NOT NULL
+        );
+    </string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_contato">ContatoActivity</string>
+    <string name="lb_telefone">Número de telefone</string>
+    <string name="title_activity_cliente">ClienteActivity</string>
+    <string name="title_activity_endereco">EnderecoActivity</string>
+    <string name="lb_logradouro">Logradouro</string>
+    <string name="lb_numero">Número</string>
+    <string name="lb_bairro">Bairro</string>
+    <string name="lb_novo">Novo</string>
+    <string name="lb_imagem_produto">Imagem destaque do produto</string>
+    <string name="lb_btn_add_item">Incrementar este item</string>
+    <string name="lb_btn_del_item">Decrementar este item</string>
+    <string name="lb_alterar">Alterar</string>
+    <string name="ds_imagem_perfil">Imagem do perfil</string>
+    <string name="lb_excuir">Excluir</string>
+    <string name="lb_adicionar">Adicionar</string>
+    <string name="lb_btn_login_facebook">Login com Facebook</string>
+
+    <string-array name="arr_teste">
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+        <item>Item 1</item>
+    </string-array>
+    <string name="title_activity_produto_item">ProdutoItemActivity</string>
+    <string name="lb_proximo">Próximo</string>
+    <string name="title_activity_pedido">PedidoActivity</string>
+    <string name="lb_cartao">CARTÃO</string>
+    <string name="lb_dinheiro">DINHEIRO</string>
+    <string name="lb_troco">Precisa de troco?</string>
+    <string name="lb_forma_pagamento">Forma de pagamento</string>
+    <string name="lb_nao_selecionado">Não selecionado</string>
+    <string name="lb_total_pedido">Total do pedido</string>
+    <string name="title_activity_meus_pedidos">MeusPedidosActivity</string>
 </resources>

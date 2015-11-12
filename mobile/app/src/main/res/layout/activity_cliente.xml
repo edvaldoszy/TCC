@@ -38,7 +38,8 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             app:met_floatingLabel="normal"
-            app:met_helperText=""
+            app:met_helperTextColor="#d9d917"
+            app:met_helperText="Preencha este apenas se quiser modificar sua senha"
             android:hint="@string/lb_senha"/>
 
     </LinearLayout>

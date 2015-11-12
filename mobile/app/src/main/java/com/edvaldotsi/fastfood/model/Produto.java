@@ -7,13 +7,14 @@ import java.io.Serializable;
  */
 public class Produto implements Serializable {
 
-    private int codigo;
-    private String nome;
-    private float valor;
-    private int tipo;
-    private boolean ativo;
-    private Categoria categoria;
-    private String descricao;
+    protected int codigo;
+    protected String nome;
+    protected float valor;
+    protected int tipo;
+    protected boolean ativo;
+    protected Categoria categoria;
+    protected String descricao;
+    protected String imagem;
 
     public Produto() {
 
@@ -80,8 +81,11 @@ public class Produto implements Serializable {
         this.descricao = descricao;
     }
 
-    @Override
-    public String toString() {
-        return nome;
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 }

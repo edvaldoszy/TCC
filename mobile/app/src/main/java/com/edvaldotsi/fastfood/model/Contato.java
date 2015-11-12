@@ -9,13 +9,7 @@ public class Contato implements Serializable {
 
     private int codigo;
     private String telefone;
-    private Cliente cliente;
-
-    public Contato(int codigo, String telefone, Cliente cliente) {
-        this.codigo = codigo;
-        this.telefone = telefone;
-        this.cliente = cliente;
-    }
+    private transient Cliente cliente;
 
     public int getCodigo() {
         return codigo;
@@ -39,5 +33,10 @@ public class Contato implements Serializable {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    @Override
+    public String toString() {
+        return telefone;
     }
 }

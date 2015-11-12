@@ -3,58 +3,80 @@ package com.edvaldotsi.fastfood.request;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+
+import com.edvaldotsi.fastfood.R;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.CookieHandler;
-import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 
 /**
  * Created by Edvaldo on 20/08/2015.
  */
-public class ServerRequest extends AsyncTask<String, String, String> {
+public class ServerRequest extends AsyncTask<String, String, Void> {
+
+    private static final int CODE_OK = 200; // Http code for successfully requests
+    private static final int CODE_ERR = 510; // Http code for unsuccessfully requests
+
+    public static final String METHOD_GET = "GET";
+    public static final String METHOD_POST = "POST";
+    public static final String METHOD_PUT= "PUT";
+    public static final String METHOD_DELET = "DELETE";
 
     private Context context;
-    private RequestInterface task;
+    private RequestListener task;
     private ProgressDialog dialog;
 
-    private static String cookie;
-
     private HttpURLConnection con;
+    private String method;
+    private static String cookie;
+    private PostData param;
+    private PostData data;
 
-    private HashMap<String, String> data;
+    private ServerResponse response;
 
-    public ServerRequest(Context context, RequestInterface task) {
+    public ServerRequest(Context context, RequestListener task) {
         this.context = context;
         this.task = task;
-
-        this.data = new HashMap<>();
-
-        CookieHandler.setDefault(new CookieManager());
+        this.method = METHOD_GET;
     }
 
-    public void addData(String key, String value) {
-        data.put(key, value);
+    public ServerRequest(Context context, RequestListener task, String method) {
+        this.context = context;
+        this.task = task;
+        this.method = method;
     }
 
-    private String getPostData()
-    {
-        StringBuilder out = new StringBuilder();
-        for (String name : data.keySet()) {
-            if (out.length() > 0)
-                out.append("&");
+    public void addParam(String key, String value) {
+        if (param == null)
+            param = new PostData();
 
-            out.append(name);
-            out.append("=");
-            out.append(data.get(name));
-        }
+        param.put(key, value);
+    }
 
-        return out.toString();
+    public void addParam(String key, int value) {
+        if (param == null)
+            param = new PostData();
+
+        param.put(key, value);
+    }
+
+    public void setPostData(PostData data) {
+        this.data = data;
+    }
+
+    public void send(String path) {
+        String host = context.getResources().getString(R.string.api_host);
+        execute(host + path);
+    }
+
+    public void send(String path, PostData data) {
+        setPostData(data);
+        send(path);
     }
 
     @Override
@@ -66,16 +88,22 @@ public class ServerRequest extends AsyncTask<String, String, String> {
     }
 
     @Override
-    protected String doInBackground(String... params) { // Execute in other Thread
+    protected Void doInBackground(String... params) { // Execute in another Thread
         try {
-            URL url = new URL(params[0]);
-            con = (HttpURLConnection) url.openConnection();
-            con.setDoOutput(true);
-            con.setRequestMethod("POST");
+            String path = param != null ? (params[0] + "?" + param.toString()) : params[0];
+            Log.i("REQUEST", path);
 
-            if (data.size() > 0) {
-                DataOutputStream data = new DataOutputStream(con.getOutputStream());
-                data.writeBytes(getPostData());
+            URL url = new URL(path);
+            con = (HttpURLConnection) url.openConnection();
+            con.setConnectTimeout(9000);
+            //con.setInstanceFollowRedirects(false);
+            con.setRequestMethod(method);
+
+            if (data != null && data.size() > 0) {
+                con.setDoOutput(true);
+                DataOutputStream output = new DataOutputStream(con.getOutputStream());
+                output.writeBytes(data.toString());
+                Log.i("POST", data.toString());
             }
 
             if (cookie != null) {
@@ -85,24 +113,58 @@ public class ServerRequest extends AsyncTask<String, String, String> {
                 if (session != null)
                     cookie = session;
             }
+            con.connect();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            return reader.readLine();
+            BufferedReader reader;
+            int code = con.getResponseCode();
+            if (code >= 200 && code < 400) {
+                 reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            } else if (code < 500) {
+                reader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+            } else {
+                throw new IOException("Server Error");
+            }
+
+            StringBuilder output = new StringBuilder();
+            String line = reader.readLine();
+            while (line != null) {
+                if (line.isEmpty()) break;
+
+                output.append(line);
+                line = reader.readLine();
+            }
+
+            response = new ServerResponse(con.getResponseCode(), con.getResponseMessage(), output.toString());
         } catch (IOException ex) {
+            response = new ServerResponse(500, ex.getMessage());
             ex.printStackTrace();
         }
         return null;
     }
 
     @Override
-    protected void onProgressUpdate(String... values) {
-        super.onProgressUpdate(values);
+    protected void onPostExecute(Void aVoid) {
+        dialog.dismiss();
+        int code = response.getCode();
+        if (code >= 500) {
+            task.onRequestError(response);
+            return;
+        }
+
+        if (code < 400) {
+            task.onResponseSuccess(response);
+            Log.i("OUTPUT", response.getOutput());
+        } else {
+            task.onResponseError(response);
+        }
     }
 
-    @Override
-    protected void onPostExecute(String response) { // Execute after other Thread
-        task.afterRequest(new ServerResponse(response));
-        dialog.dismiss();
-        con = null;
+    public interface RequestListener {
+
+        void onResponseSuccess(ServerResponse response);
+
+        void onResponseError(ServerResponse response);
+
+        void onRequestError(ServerResponse response);
     }
 }

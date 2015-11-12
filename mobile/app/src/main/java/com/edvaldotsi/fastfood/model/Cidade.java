@@ -47,6 +47,22 @@ public class Cidade implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cidade cidade = (Cidade) o;
+
+        return codigo == cidade.codigo;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return codigo;
+    }
+
+    @Override
     public String toString() {
         return nome + " - " + uf;
     }

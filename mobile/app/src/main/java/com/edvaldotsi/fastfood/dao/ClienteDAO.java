@@ -5,6 +5,9 @@ import android.database.Cursor;
 
 import com.edvaldotsi.fastfood.model.Cliente;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Created by Edvaldo on 14/09/2015.
  */
@@ -12,11 +15,6 @@ public class ClienteDAO extends AbstractDAO<Cliente> {
 
     public ClienteDAO(Context context) {
         super(context);
-    }
-
-    @Override
-    public void insert(Cliente model) {
-
     }
 
     @Override
@@ -31,10 +29,16 @@ public class ClienteDAO extends AbstractDAO<Cliente> {
         return cliente;
     }
 
-    public Cliente getUsuarioLogado(boolean visitante) {
-        if (visitante)
-            return new Cliente(0, "Visitante");
+    @Override
+    public void insert(Cliente model) {
 
-        return createObject(getReadableDatabase().query("cliente", null, null, null, null, null, null));
+    }
+
+    public Cliente getClienteLocal() {
+        Cursor c = getReadableDatabase().query("cliente", null, null, null, null, null, null);
+        if (c.moveToFirst())
+            return createObject(c);
+
+        return null;
     }
 }

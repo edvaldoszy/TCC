@@ -13,7 +13,9 @@ public class Endereco implements Serializable {
     private String bairro;
     private String lat, lng;
     private Cidade cidade;
-    private Cliente cliente;
+    private transient Cliente cliente;
+
+    private transient boolean entrega;
 
     public int getCodigo() {
         return codigo;
@@ -79,8 +81,32 @@ public class Endereco implements Serializable {
         this.cliente = cliente;
     }
 
+    public boolean isEntrega() {
+        return entrega;
+    }
+
+    public void setEntrega(boolean entrega) {
+        this.entrega = entrega;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Endereco endereco = (Endereco) o;
+
+        return codigo == endereco.codigo;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return codigo;
+    }
+
     @Override
     public String toString() {
-        return logradouro + ", " + numero;
+        return logradouro + ", " + numero + " - " + bairro;
     }
 }
