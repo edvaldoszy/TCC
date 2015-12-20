@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,6 +54,10 @@ public abstract class AbstractAdapter<VH extends AbstractAdapter.AbstractViewHol
 
     public void setItems(List<I> items) {
         mItems = items;
+    }
+
+    public void setItems(I[] items) {
+        mItems = Arrays.asList(items);
     }
 
     public List<I> getItems() {

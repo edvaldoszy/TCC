@@ -40,6 +40,12 @@
             android:text="@string/lb_entrar"
             android:onClick="btnLoginAction"/>
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lb_cadastrar"
+            android:onClick="btnCadastroAction"/>
+
     </LinearLayout>
 
 </LinearLayout>

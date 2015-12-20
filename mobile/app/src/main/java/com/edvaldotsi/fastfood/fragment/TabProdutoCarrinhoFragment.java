@@ -149,9 +149,6 @@ public class TabProdutoCarrinhoFragment extends Fragment implements PedidoActivi
 
     @Override
     public boolean validar() {
-        if (rvDetalhes.getAdapter().getItemCount() > 0)
-            return true;
-
-        return false;
+        return rvDetalhes.getAdapter().getItemCount() > 0;
     }
 }

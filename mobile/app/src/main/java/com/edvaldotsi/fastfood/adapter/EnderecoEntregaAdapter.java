@@ -20,12 +20,13 @@ public class EnderecoEntregaAdapter extends AbstractAdapter<EnderecoEntregaAdapt
     private CheckBox lastChecked;
     private Endereco lastEnderecoChecked;
 
-    public EnderecoEntregaAdapter(Context context, List items) {
+    public EnderecoEntregaAdapter(Context context, List<Endereco> items) {
         super(context, items);
     }
 
-    public boolean estaMarcado() {
-        return lastChecked != null;
+    // Retorna o endereço que foi selecionado pelo cliente
+    public Endereco selecionado() {
+        return lastEnderecoChecked;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class EnderecoEntregaAdapter extends AbstractAdapter<EnderecoEntregaAdapt
         holder.ckEntrega.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (lastChecked != null) {
+                if (lastChecked != null && !lastEnderecoChecked.equals(endereco)) {
                     lastChecked.setChecked(false);
                     lastEnderecoChecked.setEntrega(false);
                 }

@@ -1,5 +1,6 @@
 package com.edvaldotsi.fastfood.dao;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
@@ -21,6 +22,9 @@ public class ProdutoDAO extends AbstractDAO<Produto> {
 
     @Override
     public void insert(Produto model) {
+        ContentValues cv = new ContentValues();
 
+        long codigo = getWritableDatabase().insert("produto", null, cv);
+        model.setCodigo((int) codigo);
     }
 }

@@ -8,7 +8,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 import com.edvaldotsi.fastfood.PedidoActivity;
 import com.edvaldotsi.fastfood.R;
@@ -20,8 +21,8 @@ public class TabPagamentoFragment extends Fragment implements PedidoActivity.Val
     private Activity activity;
     private PedidoActivity listener;
 
-    private Button btCartao;
-    private Button btDinheiro;
+    private ToggleButton tbCartao;
+    private ToggleButton tbDinheiro;
     private MaterialEditText edTroco;
 
     public static TabPagamentoFragment newInstance() {
@@ -50,22 +51,39 @@ public class TabPagamentoFragment extends Fragment implements PedidoActivity.Val
 
         edTroco = (MaterialEditText) v.findViewById(R.id.ed_troco);
 
-        btCartao = (Button) v.findViewById(R.id.bt_cartao);
-        btCartao.setOnClickListener(new View.OnClickListener() {
+        tbCartao = (ToggleButton) v.findViewById(R.id.tb_cartao);
+        tbCartao.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                PedidoActivity.carrinho.getPedido().setPagamento(Pedido.PAGAMENTO_CARTAO);
-                edTroco.setVisibility(View.GONE);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    PedidoActivity.carrinho.getPedido().setPagamento(Pedido.PAGAMENTO_CARTAO);
+                    tbDinheiro.setChecked(false);
+                    edTroco.setVisibility(View.GONE);
+                } else {
+                    if (PedidoActivity.carrinho.getPedido().getPagamento() == Pedido.PAGAMENTO_CARTAO) {
+                        PedidoActivity.carrinho.getPedido().setPagamento(0);
+                    }
+                }
                 listener.update();
             }
         });
 
-        btDinheiro = (Button) v.findViewById(R.id.bt_dinheiro);
-        btDinheiro.setOnClickListener(new View.OnClickListener() {
+        tbDinheiro = (ToggleButton) v.findViewById(R.id.tb_dinheiro);
+        tbDinheiro.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                PedidoActivity.carrinho.getPedido().setPagamento(Pedido.PAGAMENTO_DINHEIRO);
-                edTroco.setVisibility(View.VISIBLE);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    PedidoActivity.carrinho.getPedido().setPagamento(Pedido.PAGAMENTO_DINHEIRO);
+                    tbCartao.setChecked(false);
+                    edTroco.setVisibility(View.VISIBLE);
+                } else {
+                    edTroco.setVisibility(View.GONE);
+                    if (PedidoActivity.carrinho.getPedido().getPagamento() == Pedido.PAGAMENTO_DINHEIRO) {
+                        PedidoActivity.carrinho.getPedido().setPagamento(0);
+                    }
+                }
                 listener.update();
             }
         });
@@ -90,6 +108,20 @@ public class TabPagamentoFragment extends Fragment implements PedidoActivity.Val
 
     @Override
     public boolean validar() {
-        return true;
+        int pagamento = PedidoActivity.carrinho.getPedido().getPagamento();
+        if (pagamento == Pedido.PAGAMENTO_CARTAO) {
+            return true;
+
+        } else if (pagamento == Pedido.PAGAMENTO_DINHEIRO) {
+            try {
+                float troco = Float.parseFloat(edTroco.getText().toString());
+                if (troco > 0)
+                    PedidoActivity.carrinho.getPedido().setTroco(troco);
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+            }
+            return true;
+        }
+        return false;
     }
 }

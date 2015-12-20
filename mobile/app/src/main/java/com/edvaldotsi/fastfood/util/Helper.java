@@ -16,8 +16,17 @@ public class Helper {
         return context.getResources().getString(R.string.server_host) + path;
     }
 
+    public static String loadImage(Context context, String path, int width, int height) {
+
+        return loadImage(context, path) + "?w=" + width + "&h=" + height;
+    }
+
     public static String formatNumber(float valor) {
         DecimalFormat df = new DecimalFormat("0.00");
         return df.format(valor);
+    }
+
+    public static String formatNumber(float valor, String prefix) {
+        return prefix + formatNumber(valor);
     }
 }

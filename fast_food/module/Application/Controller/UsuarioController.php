@@ -7,6 +7,7 @@ use Application\Helper\RegexValidatorException;
 use Application\Model\UsuarioModel;
 use Application\View\ApplicationView;
 use Szy\Http\Request;
+use Szy\Mvc\Application;
 use Szy\Mvc\View\View;
 
 class UsuarioController extends AdminController
@@ -23,18 +24,6 @@ class UsuarioController extends AdminController
         $model = new UsuarioModel();
         $view->setAttribute('usuarios', $model->listar($pagina));
         $view->flush();
-    }
-
-    private function permissao()
-    {
-        if ($this->usuario->admin != '1') {
-            $view = new ApplicationView($this, 'usuario/permissao');
-            $view->setTitle('Usuário sem permissão');
-            $view->setMessage(new Message('Usuário sem permissão para realizar esta ação', Message::TYPE_WARNING));
-            $view->flush();
-            return false;
-        }
-        return true;
     }
 
     public function indexAction()
@@ -57,17 +46,26 @@ class UsuarioController extends AdminController
             $nome = $this->getNome();
             $email = $this->getEmail();
             $senha = $this->getSenha();
+            $admin = $this->getPostField('admin');
             try {
                 $nome->validate(true);
                 $email->validate();
                 $senha->validate();
 
-                $model->insert('usuario', array('nome' => $nome->getValue(), 'email' => $email->getValue(), 'senha' => md5($senha->getValue()), 'admin'=> '0'));
-                $view->setMessage(new Message('Usuário alterado com sucesso', Message::TYPE_SUCCESS));
+                $model->insert('usuario', array(
+                    'nome' => $nome->getValue(),
+                    'email' => $email->getValue(),
+                    'senha' => md5($senha->getValue()),
+                    'admin'=> intval($admin->getValue())
+                ));
 
+                $view->setMessage(new Message('Usuário alterado com sucesso', Message::TYPE_SUCCESS));
                 $this->response->sendRedirect('/usuarios/alterar/' . $model->lastID('codigo') . '?sucesso=s');
             } catch (RegexValidatorException $ex) {
                 $view->setMessage(new Message($ex->getMessage(), Message::TYPE_DANGER));
+            } catch (\Exception $ex) {
+                Application::logsys(100, $ex->getMessage());
+                $view->setMessage(new Message('Erro ao finalizar a operação. Entre em contato com o administrador do sistema.', Message::TYPE_DANGER));
             }
         }
         $view->flush();
@@ -87,18 +85,29 @@ class UsuarioController extends AdminController
             $nome = $this->getNome();
             $email = $this->getEmail();
             $senha = $this->getSenha();
+            $admin = $this->getPostField('admin');
             try {
                 $nome->validate();
                 $email->validate();
 
-                if ($senha->getValue() == '') {
-                    $model->update('usuario', array('nome' => $nome->getValue(), 'email' => $email->getValue()), 'codigo = ?', array($codigo));
-                } else {
-                    $model->update('usuario', array('nome' => $nome->getValue(), 'email' => $email->getValue(), 'senha' => md5($senha->getValue())), 'codigo = ?', array($codigo));
-                }
+                $arguments = array(
+                    'nome' => $nome->getValue(),
+                    'email' => $email->getValue(),
+                    'senha' => md5($senha->getValue()),
+                    'admin' => intval($admin->getValue())
+                );
+
+                if ($senha->getValue() != '')
+                    $arguments['senha'] = $senha->getValue();
+
+                $model->update('usuario', $arguments, 'codigo = ?', array($codigo));
+
                 $view->setMessage(new Message('Usuário alterado com sucesso', Message::TYPE_SUCCESS));
             } catch (RegexValidatorException $ex) {
                 $view->setMessage(new Message($ex->getMessage(), Message::TYPE_DANGER));
+            } catch (\Exception $ex) {
+                Application::logsys(100, $ex->getMessage());
+                $view->setMessage(new Message('Erro ao finalizar a operação. Entre em contato com o administrador do sistema.', Message::TYPE_DANGER));
             }
         } else {
             $usuario = (array) $model->row('usuario', null, 'codigo = ?', array($codigo));

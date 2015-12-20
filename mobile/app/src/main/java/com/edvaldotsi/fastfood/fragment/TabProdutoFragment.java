@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.edvaldotsi.fastfood.ProdutoActivity;
 import com.edvaldotsi.fastfood.R;
 import com.edvaldotsi.fastfood.model.Detalhes;
 import com.edvaldotsi.fastfood.model.Produto;
+import com.edvaldotsi.fastfood.util.Helper;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -30,9 +30,11 @@ public class TabProdutoFragment extends Fragment {
     private TextView tvValor;
     private TextView tvQuantidade;
 
-    private ImageButton btAdd, btDel;
+    private TextView tvValorProduto;
+    private TextView tvValorItens;
+    private TextView tvValorTotal;
 
-    DecimalFormat df = new DecimalFormat("0.00");
+    private ImageButton btAdd, btDel;
 
     public static TabProdutoFragment newInstance() {
         return new TabProdutoFragment();
@@ -52,9 +54,13 @@ public class TabProdutoFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_tab_produto, container, false);
 
         imProduto = (ImageView) v.findViewById(R.id.im_produto);
-        tvNome = (TextView) v.findViewById(R.id.tv_nome);
-        tvValor = (TextView) v.findViewById(R.id.tv_valor);
+        //tvNome = (TextView) v.findViewById(R.id.tv_nome);
+        //tvValor = (TextView) v.findViewById(R.id.tv_valor);
         tvQuantidade = (TextView) v.findViewById(R.id.tv_quantidade);
+
+        tvValorProduto = (TextView) v.findViewById(R.id.tv_valor_produto);
+        tvValorItens = (TextView) v.findViewById(R.id.tv_valor_itens);
+        tvValorTotal = (TextView) v.findViewById(R.id.tv_valor_total);
 
         btAdd = (ImageButton) v.findViewById(R.id.bt_add);
         btAdd.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +68,8 @@ public class TabProdutoFragment extends Fragment {
             public void onClick(View v) {
                 detalhes.incrementar();
                 tvQuantidade.setText(String.valueOf(detalhes.getQuantidade()));
-                tvValor.setText("R$ " + df.format(detalhes.getValorTotal()));
+                //tvValor.setText(Helper.formatNumber(detalhes.getValorTotal(), "R$ "));
+                atualizarValores();
             }
         });
 
@@ -72,13 +79,30 @@ public class TabProdutoFragment extends Fragment {
             public void onClick(View v) {
                 detalhes.decrementar();
                 tvQuantidade.setText(String.valueOf(detalhes.getQuantidade()));
-                tvValor.setText("R$ " + df.format(detalhes.getValorTotal()));
+                //tvValor.setText(Helper.formatNumber(detalhes.getValorTotal(), "R$ "));
+                atualizarValores();
             }
         });
 
         update();
+        atualizarValores();
 
         return v;
+    }
+
+    public void atualizarValores() {
+        if (tvValorItens != null) {
+            tvValorItens.setText(Helper.formatNumber(detalhes.getValorItens(), "R$ "));
+            tvValorTotal.setText(Helper.formatNumber(detalhes.getValorTotal(), "R$ "));
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser)
+            atualizarValores();
     }
 
     @Override
@@ -103,9 +127,10 @@ public class TabProdutoFragment extends Fragment {
             Picasso.with(activity).load(imagem).resize(width, height).centerCrop().into(imProduto);
         }
 
-        tvNome.setText(produto.getNome());
-        tvValor.setText("R$ " + df.format(detalhes.getValorTotal()));
+        //tvNome.setText(produto.getNome());
+        //tvValor.setText("R$ " + df.format(detalhes.getValorTotal()));
 
         tvQuantidade.setText(String.valueOf(detalhes.getQuantidade()));
+        tvValorProduto.setText(Helper.formatNumber(detalhes.getProduto().getValor(), "R$ "));
     }
 }

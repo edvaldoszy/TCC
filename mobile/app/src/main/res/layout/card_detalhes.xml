@@ -41,32 +41,55 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="end|center_vertical">
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/bt_del"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_del"
-                android:contentDescription="@string/lb_btn_del_item"
-                android:background="@drawable/round_button_danger"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/tv_quantidade"
+                <ImageButton
+                    android:visibility="gone"
+                    android:id="@+id/bt_favorito"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_heart"
+                    android:contentDescription="@string/ds_add_favoritos"
+                    android:background="@drawable/round_button_default"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/bt_add"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_add"
-                android:contentDescription="@string/lb_btn_add_item"
-                android:background="@drawable/round_button_success"/>
+                <ImageButton
+                    android:id="@+id/bt_del"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_del"
+                    android:contentDescription="@string/lb_btn_del_item"
+                    android:background="@drawable/round_button_danger"/>
+
+                <TextView
+                    android:id="@+id/tv_quantidade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" />
+
+                <ImageButton
+                    android:id="@+id/bt_add"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_add"
+                    android:contentDescription="@string/lb_btn_add_item"
+                    android:background="@drawable/round_button_success"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

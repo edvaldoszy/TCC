@@ -2,23 +2,26 @@
 
 namespace Application\Model;
 
-use Szy\Database\ResultSet;
 use Szy\Mvc\Model\AbstractModel;
 
 class PedidoModel extends AbstractModel
 {
+    public static $ESTADO_ABERTO = 1;
+    public static $ESTADO_FECHADO = 2;
+    public static $ESTADO_PRODUCAO = 3;
+
     public static $FORMAS_PAGAMENTO = array(
         '1' => 'Dinheiro',
         '2' => 'Cartão'
     );
 
-    public function pedidosAbertos()
+    public function pedidos($estado)
     {
         $stmt = $this->query("SELECT pe.*, cl.nome AS cliente, SUM(pp.quantidade) AS produtos FROM pedido pe
         INNER JOIN cliente cl ON (cl.codigo = pe.cliente)
         INNER JOIN pedido_produto pp ON (pp.pedido = pe.codigo)
-        WHERE pe.situacao = 1
-        GROUP BY pe.codigo ORDER BY pe.codigo DESC");
+        WHERE pe.situacao = ? OR pe.situacao = ?
+        GROUP BY pe.codigo ORDER BY pe.codigo DESC", array($estado, ($estado == self::$ESTADO_ABERTO ? self::$ESTADO_PRODUCAO : self::$ESTADO_FECHADO)));
 
         $res = new \ArrayIterator();
         while ($row = $stmt->fetchObject()) {
@@ -32,7 +35,6 @@ class PedidoModel extends AbstractModel
                     $row->str_pagamento = 'Cartão';
                     break;
             }
-
             $res->append($row);
         }
 
@@ -47,6 +49,7 @@ class PedidoModel extends AbstractModel
     {
         $pedido = $this->row('pedido', null, 'codigo = ?', array($codigo));
         $pedido->cliente = $this->row('cliente', array('nome'), 'codigo = ?', array($pedido->cliente));
+        $pedido->endereco = json_decode($pedido->endereco);
 
         $pedido->str_pagamento = PedidoModel::$FORMAS_PAGAMENTO[$pedido->pagamento];
         if ($pedido->pagamento == '1' && !empty($pedido->troco) && $pedido->troco > 0) {
@@ -62,7 +65,7 @@ class PedidoModel extends AbstractModel
 
             $stmt2 = $this->query("SELECT po.nome, pm.* FROM pedido_item pm
             INNER JOIN produto po ON (po.codigo = pm.item)
-            WHERE pm.pedido = ? AND pm.produto = ?", array($row->pedido, $row->produto->codigo));
+            WHERE pm.codigo = ? AND pm.pedido = ? AND pm.produto = ?", array($row->codigo, $row->pedido, $row->produto->codigo));
 
             while ($item = $stmt2->fetchObject()) {
                 $item->valor_total = number_format($item->quantidade * $item->valor, 2);

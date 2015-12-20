@@ -7,18 +7,20 @@
     android:padding="14dp"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/bt_cartao"
+    <ToggleButton
+        android:id="@+id/tb_cartao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/default_margin_bottom"
-        android:text="@string/lb_cartao" />
+        android:textOn="@string/lb_cartao"
+        android:textOff="@string/lb_cartao"
+        android:text="@string/lb_cartao"/>
 
-    <Button
-        android:id="@+id/bt_dinheiro"
+    <ToggleButton
+        android:id="@+id/tb_dinheiro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/default_margin_bottom"
+        android:textOn="@string/lb_dinheiro"
+        android:textOff="@string/lb_dinheiro"
         android:text="@string/lb_dinheiro"/>
 
     <com.rengwuxian.materialedittext.MaterialEditText

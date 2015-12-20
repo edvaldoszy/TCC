@@ -2,6 +2,8 @@ package com.edvaldotsi.fastfood;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
@@ -18,9 +20,7 @@ public abstract class ToolbarActivity extends AppCompatActivity implements Serve
     private Toolbar toolbar;
     private int layout;
 
-    private Toast toast;
-
-    protected Gson gson;
+    protected Gson gson = new Gson();
 
     public void setLayout(int resource) {
         layout = resource;
@@ -39,26 +39,40 @@ public abstract class ToolbarActivity extends AppCompatActivity implements Serve
         toolbar.setTitle("FastFood");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-        gson = new Gson();
     }
 
-    public void showMessage(String str) {
-        toast.setText(str);
-        toast.show();
+    protected RecyclerView getRecyclerView(int resource) {
+        RecyclerView rv = (RecyclerView) findViewById(resource);
+
+        StaggeredGridLayoutManager llm = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        llm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        rv.setLayoutManager(llm);
+
+        return rv;
+    }
+
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onResponseError(ServerResponse response) {
-        showMessage(response.getMessage());
+
+        if (response.getCode() == 401) {
+            showMessage("Sua sessão expirou, faça login novamente");
+        } else {
+            showMessage("Erro ao completar operação, tente novamente mais tarde");
+        }
+
         Log.e("RESPONSE ERROR", response.getMessage());
         System.out.println(response.getOutput());
     }
 
     @Override
     public void onRequestError(ServerResponse response) {
-        showMessage(response.getMessage());
+
+        showMessage("Erro ao completar operação, tente novamente mais tarde");
+
         Log.e("REQUEST ERROR", response.getMessage());
         System.out.println(response.getOutput());
     }

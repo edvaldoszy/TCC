@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.edvaldotsi.fastfood.R;
 import com.edvaldotsi.fastfood.model.Produto;
 import com.edvaldotsi.fastfood.util.CircleTransform;
+import com.edvaldotsi.fastfood.util.Helper;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -28,12 +29,11 @@ public class ProdutoAdapter extends AbstractAdapter<ProdutoAdapter.ViewHolder, P
     @Override
     protected void onBindViewHolder(ViewHolder holder, int position, Produto item) {
         holder.tvNome.setText(item.getNome());
-        holder.tvValor.setText("R$ " + df.format(item.getValor()));
+        holder.tvValor.setText(Helper.formatNumber(item.getValor(), "R$ "));
         holder.tvDescricao.setText(item.getDescricao());
 
         if (item.getImagem() != null && !"".equals(item.getImagem())) {
-            String imagem = mContext.getResources().getString(R.string.server_host) + item.getImagem();
-            System.out.println(imagem);
+            String imagem = Helper.loadImage(mContext, item.getImagem(), 60, 60);
             Picasso.with(mContext).load(imagem).error(R.drawable.sem_imagem).resize(60, 60).centerCrop().transform(new CircleTransform()).into(holder.imProduto);
         }
     }

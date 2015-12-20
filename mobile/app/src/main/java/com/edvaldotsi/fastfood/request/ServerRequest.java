@@ -19,13 +19,15 @@ import java.net.URL;
  */
 public class ServerRequest extends AsyncTask<String, String, Void> {
 
+    private static final int CONNECTION_TIMEOUT = 5000;
+
     private static final int CODE_OK = 200; // Http code for successfully requests
     private static final int CODE_ERR = 510; // Http code for unsuccessfully requests
 
     public static final String METHOD_GET = "GET";
     public static final String METHOD_POST = "POST";
-    public static final String METHOD_PUT= "PUT";
-    public static final String METHOD_DELET = "DELETE";
+    public static final String METHOD_PUT = "PUT";
+    public static final String METHOD_DELETE = "DELETE";
 
     private Context context;
     private RequestListener task;
@@ -36,6 +38,10 @@ public class ServerRequest extends AsyncTask<String, String, Void> {
     private static String cookie;
     private PostData param;
     private PostData data;
+    private boolean debug = false;
+
+    // Usada para requisições que existe interface do usuário para poder mostrar a janela de carregando
+    public boolean hasViews = true;
 
     private ServerResponse response;
 
@@ -43,6 +49,12 @@ public class ServerRequest extends AsyncTask<String, String, Void> {
         this.context = context;
         this.task = task;
         this.method = METHOD_GET;
+    }
+
+    public ServerRequest(Context context, String method, RequestListener task) {
+        this.context = context;
+        this.method = method;
+        this.task = task;
     }
 
     public ServerRequest(Context context, RequestListener task, String method) {
@@ -79,25 +91,34 @@ public class ServerRequest extends AsyncTask<String, String, Void> {
         send(path);
     }
 
+    public void setDebugMode(boolean estado) {
+        debug = estado;
+    }
+
     @Override
     protected void onPreExecute() { // Execute in main Thread
-        dialog = new ProgressDialog(context);
-        dialog.setCancelable(false);
-        dialog.setMessage("Carregando...");
-        dialog.show();
+        if (hasViews) {
+            dialog = new ProgressDialog(context);
+            dialog.setCancelable(false);
+            dialog.setMessage("Carregando...");
+            dialog.show();
+        }
     }
 
     @Override
     protected Void doInBackground(String... params) { // Execute in another Thread
         try {
-            String path = param != null ? (params[0] + "?" + param.toString()) : params[0];
+            String path = param != null ? (params[0] + (debug ? "?debug=y&" : "?") + param.toString()) : params[0] + (debug ? "?debug=y" : "");
             Log.i("REQUEST", path);
 
             URL url = new URL(path);
             con = (HttpURLConnection) url.openConnection();
-            con.setConnectTimeout(9000);
+            con.setConnectTimeout(CONNECTION_TIMEOUT);
             //con.setInstanceFollowRedirects(false);
             con.setRequestMethod(method);
+
+            if (cookie != null)
+                con.setRequestProperty("Cookie", cookie);
 
             if (data != null && data.size() > 0) {
                 con.setDoOutput(true);
@@ -106,23 +127,18 @@ public class ServerRequest extends AsyncTask<String, String, Void> {
                 Log.i("POST", data.toString());
             }
 
-            if (cookie != null) {
-                con.addRequestProperty("Cookie", cookie);
-            } else {
-                String session = con.getHeaderField("Set-Cookie");
-                if (session != null)
-                    cookie = session;
-            }
             con.connect();
+
+            String c = con.getHeaderField("Set-Cookie");
+            if (c != null)
+                cookie = c;
 
             BufferedReader reader;
             int code = con.getResponseCode();
             if (code >= 200 && code < 400) {
                  reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            } else if (code < 500) {
+            } else  {
                 reader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-            } else {
-                throw new IOException("Server Error");
             }
 
             StringBuilder output = new StringBuilder();
@@ -144,18 +160,17 @@ public class ServerRequest extends AsyncTask<String, String, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        dialog.dismiss();
+        if (hasViews)
+            dialog.dismiss();
+
         int code = response.getCode();
         if (code >= 500) {
             task.onRequestError(response);
-            return;
-        }
-
-        if (code < 400) {
+        } else if (code >= 400) {
+            task.onResponseError(response);
+        } else {
             task.onResponseSuccess(response);
             Log.i("OUTPUT", response.getOutput());
-        } else {
-            task.onResponseError(response);
         }
     }
 

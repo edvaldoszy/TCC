@@ -18,7 +18,7 @@ import com.rengwuxian.materialedittext.validation.RegexpValidator;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-public class    ClienteActivity extends ToolbarActivity {
+public class ClienteActivity extends ToolbarActivity {
 
     private MaterialEditText edtNome, edtEmail, edtSenha;
     private Cliente cliente;

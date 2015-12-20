@@ -4,10 +4,17 @@ namespace Application\Model;
 
 use Szy\Database\ResultSet;
 use Szy\Mvc\Model\AbstractModel;
+use Szy\Util\Math;
 
 class ClienteModel extends AbstractModel
 {
 	protected $table = 'cliente';
+
+    public function listar($pagina, $limite = 20)
+    {
+        $offset = ($pagina > 1) ? (Math::abs($pagina - 1) * $limite) : 0;
+        return $this->select('cliente', null, null, null, null, $limite, $offset);
+    }
 
     /**
 	 * @param ResultSet $rs

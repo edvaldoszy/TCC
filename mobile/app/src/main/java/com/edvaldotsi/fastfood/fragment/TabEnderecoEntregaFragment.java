@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.edvaldotsi.fastfood.PedidoActivity;
 import com.edvaldotsi.fastfood.R;
+import com.edvaldotsi.fastfood.ToolbarActivity;
 import com.edvaldotsi.fastfood.adapter.EnderecoEntregaAdapter;
 import com.edvaldotsi.fastfood.dao.ContaDAO;
 import com.edvaldotsi.fastfood.model.Endereco;
@@ -57,17 +58,20 @@ public class TabEnderecoEntregaFragment extends Fragment implements PedidoActivi
             }
 
             @Override
-            public void onResponseError(ServerResponse response) {}
+            public void onResponseError(ServerResponse response) {
+                ((ToolbarActivity) activity).onResponseError(response);
+            }
 
             @Override
-            public void onRequestError(ServerResponse response) {}
+            public void onRequestError(ServerResponse response) {
+                ((ToolbarActivity) activity).onRequestError(response);
+            }
         });
         request.send("/clientes/" + ContaDAO.getCliente().getCodigo() + "/enderecos/0");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("Resume");
         View v = inflater.inflate(R.layout.fragment_tab_endereco_entrega, container, false);
 
         rvEnderecos = (RecyclerView) v.findViewById(R.id.rv_enderecos);
@@ -100,7 +104,13 @@ public class TabEnderecoEntregaFragment extends Fragment implements PedidoActivi
 
     @Override
     public boolean validar() {
-        return ((EnderecoEntregaAdapter) rvEnderecos.getAdapter()).estaMarcado();
+        // Verifica se o endereço selecionado não é nulo e está marcado para entrega
+        Endereco endereco = ((EnderecoEntregaAdapter) rvEnderecos.getAdapter()).selecionado();
+        if (endereco != null && endereco.isEntrega()) {
+            PedidoActivity.carrinho.getPedido().setEndereco(endereco);
+            return true;
+        }
 
+        return false;
     }
 }

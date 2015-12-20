@@ -33,7 +33,7 @@ class RegexValidator
     public function valid($value)
     {
         $value = trim($value);
-        if (empty($value))
+        if ($value == '')
             return false;
 
         return $this->pattern->match($value);

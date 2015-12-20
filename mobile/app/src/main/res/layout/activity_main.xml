@@ -4,19 +4,37 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:id="@+id/dlMain">
 
-    <LinearLayout tools:context=".MainActivity"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/cl_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <include android:id="@+id/toolbar_main" layout="@layout/toolbar_main" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_produto"
+        <LinearLayout tools:context=".MainActivity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <include android:id="@+id/toolbar_main" layout="@layout/toolbar_main" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_produto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_carrinho"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_carrinho"
+            app:elevation="4dp"
+            app:layout_anchor="@id/cl_main"
+            app:layout_anchorGravity="bottom|right|end"/>
+
+    </android.support.design.widget.CoordinatorLayout>
     
     <fragment
         android:id="@+id/fragment_navigation_drawer"

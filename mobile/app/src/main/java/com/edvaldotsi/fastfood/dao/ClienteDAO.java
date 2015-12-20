@@ -33,12 +33,4 @@ public class ClienteDAO extends AbstractDAO<Cliente> {
     public void insert(Cliente model) {
 
     }
-
-    public Cliente getClienteLocal() {
-        Cursor c = getReadableDatabase().query("cliente", null, null, null, null, null, null);
-        if (c.moveToFirst())
-            return createObject(c);
-
-        return null;
-    }
 }

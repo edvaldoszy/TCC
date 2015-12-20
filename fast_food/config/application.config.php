@@ -4,6 +4,8 @@ return array(
 
     'time_zone' => 'America/Sao_Paulo',
 
+    'server_name' => 'http://fastfood.edvaldotsi.com/',
+
     'database' => array(
         'host' => 'mysql.hostinger.com.br',
         'user' => 'u366610268_food',
@@ -17,8 +19,6 @@ return array(
         'user' => 'root',
         'pass' => '',
         'name' => 'fast_food'
-    ),
+    )
     */
-
-    'server_name' => 'http://fastfood.edvaldotsi.com/'
 );

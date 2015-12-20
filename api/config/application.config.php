@@ -17,6 +17,6 @@ return array(
         'user' => 'root',
         'pass' => '',
         'name' => 'fast_food'
-    ),
+    )
     */
 );

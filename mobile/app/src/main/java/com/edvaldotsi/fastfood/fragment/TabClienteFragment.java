@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -21,13 +23,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.edvaldotsi.fastfood.ClienteActivity;
+import com.edvaldotsi.fastfood.ContaActivity;
 import com.edvaldotsi.fastfood.R;
 import com.edvaldotsi.fastfood.dao.ContaDAO;
 import com.edvaldotsi.fastfood.model.Cliente;
+import com.edvaldotsi.fastfood.request.PostData;
+import com.edvaldotsi.fastfood.request.ServerRequest;
+import com.edvaldotsi.fastfood.request.ServerResponse;
 import com.edvaldotsi.fastfood.util.CircleTransform;
 import com.edvaldotsi.fastfood.util.Helper;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -139,60 +147,52 @@ public class TabClienteFragment extends Fragment {
         if (resultCode != Activity.RESULT_OK)
             return;
 
-        final Bitmap bitmap;
         try {
             if (requestCode == REQUEST_TIRAR_FOTO) {
-                bitmap = BitmapFactory.decodeFile(imagemUri.getPath());
+                Bitmap bitmap = BitmapFactory.decodeFile(imagemUri.getPath());
+                atualizaImagemPerfil(bitmap);
             } else if (requestCode == REQUEST_SELECIONAR_FOTO) {
-                bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), intent.getData());
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), intent.getData());
                 imagemUri = intent.getData();
-            } else {
-                return;
+                atualizaImagemPerfil(bitmap);
             }
+
+            int width = (int) (140 * getResources().getDisplayMetrics().density);
+            int height = (int) (140 * getResources().getDisplayMetrics().density);
+            Picasso.with(activity).load(imagemUri).error(R.drawable.cliente_sem_imagem).resize(width, height).centerCrop().transform(new CircleTransform()).into(imgPerfil);
         } catch (IOException ex) {
             ex.printStackTrace();
-            return;
         }
+    }
 
-        int width = (int) (140 * getResources().getDisplayMetrics().density);
-        int height = (int) (140 * getResources().getDisplayMetrics().density);
-        Picasso.with(activity).load(imagemUri).error(R.drawable.sem_imagem).resize(width, height).centerCrop().transform(new CircleTransform()).into(imgPerfil);
+    private void atualizaImagemPerfil(Bitmap bitmap) {
 
-        /*
-        // Codifica a imagem em uma string Base64
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        final String imagem = Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
 
         PostData data = new PostData();
-        data.put("imagem", imagem);
+        data.put("codigo", ContaDAO.getCliente().getCodigo());
+        data.put("imagem", Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT));
 
         // Faz a requisição e envia a imagem selecionada para o servidor
         ServerRequest request = new ServerRequest(activity, new ServerRequest.RequestListener() {
             @Override
             public void onResponseSuccess(ServerResponse response) {
-                activity.finish();
-                int width = (int) (140 * getResources().getDisplayMetrics().density);
-                int height = (int) (140 * getResources().getDisplayMetrics().density);
-                Picasso.with(activity).load(imagemUri).error(R.drawable.sem_imagem).resize(width, height).centerCrop().transform(new CircleTransform()).into(imgPerfil);
+                if (response.getCode() == 200)
+                    ((ContaActivity) activity).showMessage("Imagem de perfil atualizada");
             }
 
             @Override
             public void onResponseError(ServerResponse response) {
-                System.out.println("RESPONSE ERROR");
-                System.out.println(response.getMessage());
-                System.out.println(response.getOutput());
+                ((ContaActivity) activity).onResponseError(response);
             }
 
             @Override
             public void onRequestError(ServerResponse response) {
-                System.out.println("REQUEST ERROR");
-                System.out.println(response.getMessage());
-                System.out.println(response.getOutput());
+                ((ContaActivity) activity).onRequestError(response);
             }
         }, ServerRequest.METHOD_POST);
         request.send("/clientes/imagem", data);
-        */
     }
 
     private void update() {
@@ -204,7 +204,7 @@ public class TabClienteFragment extends Fragment {
         int width = (int) (140 * getResources().getDisplayMetrics().density);
         int height = (int) (140 * getResources().getDisplayMetrics().density);
 
-        String imagem = Helper.loadImage(activity, cliente.getImagem());
+        String imagem = Helper.loadImage(activity, cliente.getImagem(), 140, 140);
         Picasso.with(activity).load(imagem).resize(width, height).transform(new CircleTransform()).into(imgPerfil);
     }
 

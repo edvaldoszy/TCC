@@ -1,0 +1,63 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "c14e3ffb11b89d4d37c970a2179b5f8f",
+    "content-hash": "f40fc0a25d797e521813614bf3b2cfc1",
+    "packages": [
+        {
+            "name": "eventviva/php-image-resize",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eventviva/php-image-resize.git",
+                "reference": "cd5ba51c2bdd924d7c99aff6f7f1bdd7a79eb959"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eventviva/php-image-resize/zipball/cd5ba51c2bdd924d7c99aff6f7f1bdd7a79eb959",
+                "reference": "cd5ba51c2bdd924d7c99aff6f7f1bdd7a79eb959",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aditya Patadia",
+                    "homepage": "http://aditya.patadia.org/"
+                }
+            ],
+            "description": "PHP class to re-size and scale images",
+            "homepage": "https://github.com/eventviva/php-image-resize",
+            "keywords": [
+                "image",
+                "php",
+                "resize",
+                "scale"
+            ],
+            "time": "2015-06-22 23:28:21"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

@@ -2,9 +2,29 @@
 
 return array(
 
-    '/pedidos/abertos/{num}' => array(
+    '/pedidos/{num}/verificar' => array(
+        'controller' => 'FastFood\Controller\PedidoController',
+        'action' => 'verificar'
+    ),
+
+    '/pedidos/{num}/produtosclassificacao' => array(
+    'controller' => 'FastFood\Controller\PedidoController',
+    'action' => 'produtos'
+),
+
+    '/pedidos/{num}/produtos' => array(
+        'controller' => 'FastFood\Controller\PedidoController',
+        'action' => 'detalhes'
+    ),
+
+    '/pedidos/cliente/{num}' => array(
         'controller' => 'FastFood\Controller\PedidoController',
         'action' => 'abertos'
+    ),
+
+    '/pedidos/{num}' => array(
+        'controller' => 'FastFood\Controller\PedidoController',
+        'action' => 'index'
     ),
 
     '/pedidos' => array(
@@ -27,14 +47,19 @@ return array(
         'action' => 'imagem'
     ),
 
-    '/clientes/login' => array(
-        'controller' => 'FastFood\Controller\ClienteController',
-        'action' => 'login'
+    '/clientes/novo' => array(
+        'controller' => 'FastFood\Controller\CadastroClienteController',
+        'action' => 'index'
     ),
 
     '/clientes/{num}' => array(
         'controller' => 'FastFood\Controller\ClienteController',
         'action' => 'index'
+    ),
+
+    '/produtos/votar/{num}/{num}/{num}' => array(
+        'controller' => 'FastFood\Controller\ProdutoController',
+        'action' => 'votar'
     ),
 
     '/produtos/{num}/detalhes' => array(

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.edvaldotsi.fastfood.ContatoActivity;
 import com.edvaldotsi.fastfood.R;
+import com.edvaldotsi.fastfood.ToolbarActivity;
 import com.edvaldotsi.fastfood.adapter.ContatoAdapter;
 import com.edvaldotsi.fastfood.dao.ContaDAO;
 import com.edvaldotsi.fastfood.model.Contato;
@@ -136,11 +137,15 @@ public class TabContatoFragment extends Fragment {
                     }
 
                     @Override
-                    public void onResponseError(ServerResponse response) {}
+                    public void onResponseError(ServerResponse response) {
+                        ((ToolbarActivity) activity).onResponseError(response);
+                    }
 
                     @Override
-                    public void onRequestError(ServerResponse response) {}
-                }, ServerRequest.METHOD_DELET);
+                    public void onRequestError(ServerResponse response) {
+                        ((ToolbarActivity) activity).onRequestError(response);
+                    }
+                }, ServerRequest.METHOD_DELETE);
                 String path = "/clientes/" + ContaDAO.getCliente().getCodigo() + "/contatos/" + contato.getCodigo();
                 request.send(path);
             }

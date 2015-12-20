@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.edvaldotsi.fastfood.PedidoActivity;
 import com.edvaldotsi.fastfood.R;
+import com.edvaldotsi.fastfood.ToolbarActivity;
+import com.edvaldotsi.fastfood.dao.ProdutoDAO;
 import com.edvaldotsi.fastfood.model.Detalhes;
 import com.edvaldotsi.fastfood.util.Helper;
 
@@ -30,8 +32,17 @@ public class DetalhesAdapter extends AbstractAdapter<DetalhesAdapter.ViewHolder,
     @Override
     protected void onBindViewHolder(ViewHolder holder, int position, final Detalhes item) {
         holder.tvNome.setText(item.getProduto().getNome());
-        holder.tvValor.setText("R$ " + Helper.formatNumber(item.getValorTotal()));
+        holder.tvValor.setText(Helper.formatNumber(item.getValorTotal(), "R$ "));
         holder.tvQuantidade.setText(String.valueOf(item.getQuantidade()));
+
+        holder.btFavorito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Precisa ser implementado corretamente
+
+                listener.showMessage("Produto adicionado aos favoritos");
+            }
+        });
 
         holder.btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +73,8 @@ public class DetalhesAdapter extends AbstractAdapter<DetalhesAdapter.ViewHolder,
         public TextView tvNome;
         public TextView tvValor;
 
+        public ImageButton btFavorito;
+
         public ImageButton btAdd;
         public TextView tvQuantidade;
         public ImageButton btDel;
@@ -71,6 +84,8 @@ public class DetalhesAdapter extends AbstractAdapter<DetalhesAdapter.ViewHolder,
 
             tvNome = (TextView) v.findViewById(R.id.tv_nome);
             tvValor = (TextView) v.findViewById(R.id.tv_valor);
+
+            btFavorito = (ImageButton) v.findViewById(R.id.bt_favorito);
 
             btAdd = (ImageButton) v.findViewById(R.id.bt_add);
             tvQuantidade = (TextView) v.findViewById(R.id.tv_quantidade);

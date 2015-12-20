@@ -13,12 +13,11 @@ public class Produto implements Serializable {
     protected int tipo;
     protected boolean ativo;
     protected Categoria categoria;
+    protected float nota;
     protected String descricao;
     protected String imagem;
 
-    public Produto() {
-
-    }
+    public Produto() {}
 
     public Produto(int codigo, String nome) {
         this.codigo = codigo;
@@ -71,6 +70,14 @@ public class Produto implements Serializable {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public float getNota() {
+        return nota;
+    }
+
+    public void setNota(float nota) {
+        this.nota = nota;
     }
 
     public String getDescricao() {

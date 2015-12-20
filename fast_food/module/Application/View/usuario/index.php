@@ -1,7 +1,7 @@
 <section class="content-header">
 	<h1><?= $this->getTitle() ?> <a class="btn btn-primary btn-sm" href="/usuarios/cadastrar">Cadastrar</a></h1>
 	<ol class="breadcrumb">
-		<li><a href="#"><i class="fa fa-edit"></i> Usuário</a></li>
+		<li><a href="/usuarios"><i class="fa fa-edit"></i> Usuários</a></li>
 		<li class="active">Listagem</li>
 	</ol>
 </section>

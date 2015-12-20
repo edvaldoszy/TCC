@@ -2,6 +2,7 @@
 
 namespace FastFood\Controller;
 
+use Eventviva\ImageResize;
 use FastFood\Exception\ValidationException;
 use FastFood\Helper\EmailValidator;
 use FastFood\Helper\EmptyValidator;
@@ -214,7 +215,6 @@ class ClienteController extends AbstractController
             } catch (\PDOException $ex) {
                 $this->response->setStatus(500, $ex->getMessage());
             }
-            //$this->response->setStatus(406, 'Deu certo não cara :(');
             $json->flush();
         }
     }
@@ -274,7 +274,28 @@ class ClienteController extends AbstractController
     }
 
     public function imagemAction() {
-        var_dump($_POST['imagem']);
-        exit;
+        if (!$this->isMethod(Request::METHOD_POST))
+            return;
+
+        $codigo = $this->getPost('codigo');
+        $model = new ClienteModel();
+        try {
+            $cliente = $model->row('cliente', null, 'codigo = ?', array($codigo));
+            if ($cliente == null)
+                throw new ValidationException('Cliente nao existe');
+
+            if (!empty($cliente->imagem) && file_exists(PUBLIC_PATH . $cliente->imagem))
+                unlink(BASE_SYSTEM_PATH . $cliente->imagem);
+
+            $image = ImageResize::createFromBase64String(utf8_encode($this->getPost('imagem')));
+            $image->save(BASE_SYSTEM_PATH . $cliente->imagem);
+
+        } catch (ModelException $ex) {
+            $this->response->setStatus(500, $ex->getMessage());
+        } catch (ValidationException $ex) {
+            $this->response->setStatus(400, $ex->getMessage());
+        } catch (\Exception $ex) {
+            $this->response->setStatus(400, $ex->getMessage());
+        }
     }
 }

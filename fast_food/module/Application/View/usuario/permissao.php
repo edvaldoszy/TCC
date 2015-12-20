@@ -9,5 +9,5 @@
 <!-- Main content -->
 <section class="content">
     <?= $this->getMessage() ?>
-    <a class="btn btn-warning btn-flat" href="javascript:history.go(-1)">Voltar</a>
+    <a class="btn btn-primary btn-flat" href="javascript:history.go(-1)">Voltar</a>
 </section>

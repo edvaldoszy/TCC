@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.edvaldotsi.fastfood.dao.ClienteDAO;
 import com.edvaldotsi.fastfood.dao.ContaDAO;
 import com.edvaldotsi.fastfood.model.Cidade;
 import com.edvaldotsi.fastfood.model.Endereco;
@@ -15,14 +14,11 @@ import com.edvaldotsi.fastfood.request.ServerRequest;
 import com.edvaldotsi.fastfood.request.ServerResponse;
 import com.edvaldotsi.fastfood.validator.EmptyValidator;
 import com.rengwuxian.materialedittext.MaterialEditText;
-import com.rengwuxian.materialedittext.validation.RegexpValidator;
 
 import org.json.JSONException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.List;
 
 public class EnderecoActivity extends ToolbarActivity {
 
@@ -75,10 +71,14 @@ public class EnderecoActivity extends ToolbarActivity {
             }
 
             @Override
-            public void onResponseError(ServerResponse response) {}
+            public void onResponseError(ServerResponse response) {
+                EnderecoActivity.this.onResponseSuccess(response);
+            }
 
             @Override
-            public void onRequestError(ServerResponse response) {}
+            public void onRequestError(ServerResponse response) {
+                EnderecoActivity.this.onRequestError(response);
+            }
         });
         request.send("/cidades");
 

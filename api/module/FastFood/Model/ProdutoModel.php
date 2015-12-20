@@ -37,7 +37,7 @@ class ProdutoModel extends AbstractModel
 
         $stmt = $this->query("SELECT po.*, mi.caminho AS imagem FROM produto po
         LEFT JOIN midia mi ON (mi.produto = po.codigo)
-        WHERE po.codigo = ?", array($codigo));
+        WHERE po.codigo = ? LIMIT 1", array($codigo));
 
         $row = $stmt->fetchObject();
         $row->valor = floatval($row->valor);
@@ -75,7 +75,7 @@ class ProdutoModel extends AbstractModel
 
         $stmt = $this->query("SELECT pt.* FROM produto_item pt
         INNER JOIN produto po ON (po.codigo = pt.item)
-        WHERE po.tipo = 1 AND pt.produto = ?", array($produto->codigo));
+        WHERE po.tipo = 1 AND pt.produto = ? ORDER BY pt.adicional", array($produto->codigo));
 
         $res = $stmt->fetchAll();
         foreach ($res as $k => $row) {

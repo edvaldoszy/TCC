@@ -2,6 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.edvaldotsi.fastfood.MeusPedidosActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mn_pedidos_abertos"
+        android:title="@string/lb_mn_pedidos_abertos"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mn_pedidos_fechados"
+        android:title="@string/lb_mn_pedidos_fechados"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
 </menu>

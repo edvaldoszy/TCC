@@ -10,16 +10,23 @@ public class Pedido implements Serializable {
     public static final int PAGAMENTO_DINHEIRO = 1;
     public static final int PAGAMENTO_CARTAO = 2;
 
+    public static final char ABERTO = '1';
+    public static final char PRODUCAO = '3';
+    public static final char FECHADO = '2';
+
     public static final String[] FORMAS_PAGAMENTO = {"Não selecionado", "Dinheiro", "Cartão"};
 
     private int codigo;
     private float valor;
     private int pagamento;
     private float troco;
-    private long lat;
-    private long lng;
     private char situacao = '1';
     private Cliente cliente;
+    private Endereco endereco;
+    private String dt_aberto;
+    private String dt_producao;
+    private String dt_fechado;
+    private int produtos;
 
     public Pedido(Cliente cliente) {
         this.cliente = cliente;
@@ -57,22 +64,6 @@ public class Pedido implements Serializable {
         this.troco = troco;
     }
 
-    public long getLat() {
-        return lat;
-    }
-
-    public void setLat(long lat) {
-        this.lat = lat;
-    }
-
-    public long getLng() {
-        return lng;
-    }
-
-    public void setLng(long lng) {
-        this.lng = lng;
-    }
-
     public char getSituacao() {
         return situacao;
     }
@@ -87,5 +78,45 @@ public class Pedido implements Serializable {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getDataAberto() {
+        return dt_aberto;
+    }
+
+    public void setDataAberto(String data) {
+        this.dt_aberto = data;
+    }
+
+    public String getDataProducao() {
+        return dt_producao;
+    }
+
+    public void setDataProducao(String data) {
+        this.dt_producao = data;
+    }
+
+    public String getDataFechado() {
+        return dt_fechado;
+    }
+
+    public void setDataFechado(String data) {
+        this.dt_fechado = data;
+    }
+
+    public int getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(int produtos) {
+        this.produtos = produtos;
     }
 }

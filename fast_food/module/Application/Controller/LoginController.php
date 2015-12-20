@@ -50,8 +50,14 @@ class LoginController extends AbstractController
         if ($this->logado())
             $this->response->sendRedirect('/admin');
 
+        $redirect = $this->getParam('redirect');
+        if ($redirect == null)
+            $redirect = '/';
+
         $view = new ApplicationView($this, 'login/index', 'login');
+        $view->redirect = $redirect;
         $view->setTitle('Fazer login');
+
         $model = new UsuarioModel();
 
         $email = $this->getEmail();
@@ -67,7 +73,7 @@ class LoginController extends AbstractController
 
                 unset($usuario->senha);
                 $this->getSession()->write('usuario', $usuario);
-                $this->response->sendRedirect('/');
+                $this->response->sendRedirect($redirect);
             } catch (\Exception $ex) {
                 $view->setAttribute('email', $email->getValue());
                 $view->setAttribute('senha', $senha->getValue());
@@ -75,8 +81,10 @@ class LoginController extends AbstractController
             }
         }
 
-        if ($sair)
+        if ($sair) {
             $view->setMessage(new Message('Você saiu do sistema', Message::TYPE_WARNING));
+            $view->redirect = '/';
+        }
 
         $view->flush();
     }

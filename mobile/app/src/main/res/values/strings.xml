@@ -7,6 +7,7 @@
 
     <string name="api_host">http://fastfood.edvaldotsi.com/api</string>
     <string name="server_host">http://fastfood.edvaldotsi.com</string>
+
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
@@ -14,6 +15,7 @@
     <string name="lb_email">E-mail</string>
     <string name="lb_senha">Senha</string>
     <string name="lb_entrar">Entrar</string>
+    <string name="search_hint">Pesquisar</string>
 
     <string name="title_activity_detalhe">Detalhes do produto</string>
 
@@ -25,6 +27,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <integer name="NOTIFICATION_ID">333</integer>
+
     <string-array name="tabs_title">
         <item>INFORMAÇÕES</item>
         <item>ENDEREÇOS</item>
@@ -33,47 +37,47 @@
 
     <string name="SQL_CREATE_TABLE_CLIENTE">
         CREATE TABLE cliente (
-            codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            nome VARCHAR(45) NOT NULL,
-            email VARCHAR(100) NOT NULL,
-            senha VARCHAR(60) NOT NULL
+        codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        nome VARCHAR(45) NOT NULL,
+        email VARCHAR(100) NOT NULL,
+        senha VARCHAR(60) NOT NULL
         );
     </string>
     <string name="SQL_CREATE_TABLE_CIDADE">
         CREATE TABLE cidade (
-            codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            nome VARCHAR(60) NOT NULL,
-            uf CHAR(2) NOT NULL
+        codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        nome VARCHAR(60) NOT NULL,
+        uf CHAR(2) NOT NULL
         );
     </string>
 
     <string name="SQL_CREATE_TABLE_PRODUTO">
         CREATE TABLE produto (
-            codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            nome VARCHAR(60) NOT NULL,
-            valor NUMERIC(8,2) NOT NULL,
-            tipo CHAR(1) NOT NULL,
-            ativo CHAR(1) NOT NULL,
-            categoria INTEGER NOT NULL,
-            atualizado DATETIME NOT NULL
+        codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        nome VARCHAR(60) NOT NULL,
+        valor NUMERIC(8,2) NOT NULL,
+        tipo CHAR(1) NOT NULL,
+        ativo CHAR(1) NOT NULL,
+        categoria INTEGER NOT NULL,
+        atualizado DATETIME NOT NULL
         );
     </string>
     <string name="SQL_CREATE_TABLE_PRODUTO_ITEM">
         CREATE TABLE produto_item (
-            produto INTEGER NOT NULL,
-            item INTEGER NOT NULL,
-            quantidade NUMERIC(8,2) NOT NULL,
-            adicional CHAR(1) NOT NULL,
-            valor NUMERIC(8,2) NOT NULL,
-            CONSTRAINT pk_produto_item PRIMARY KEY (produto, item),
-            CONSTRAINT fk_produto_item FOREIGN KEY (produto, item) REFERENCES produto (codigo, codigo)
+        produto INTEGER NOT NULL,
+        item INTEGER NOT NULL,
+        quantidade NUMERIC(8,2) NOT NULL,
+        adicional CHAR(1) NOT NULL,
+        valor NUMERIC(8,2) NOT NULL,
+        CONSTRAINT pk_produto_item PRIMARY KEY (produto, item),
+        CONSTRAINT fk_produto_item FOREIGN KEY (produto, item) REFERENCES produto (codigo, codigo)
         );
     </string>
     <string name="SQL_CREATE_TABLE_CONTATO">
         CREATE TABLE contato (
-            codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            telefone VARCHAR(16) NOT NULL,
-            cliente INTEGER REFERENCES cliente (codigo) NOT NULL
+        codigo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        telefone VARCHAR(16) NOT NULL,
+        cliente INTEGER REFERENCES cliente (codigo) NOT NULL
         );
     </string>
 
@@ -95,23 +99,6 @@
     <string name="lb_adicionar">Adicionar</string>
     <string name="lb_btn_login_facebook">Login com Facebook</string>
 
-    <string-array name="arr_teste">
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-        <item>Item 1</item>
-    </string-array>
     <string name="title_activity_produto_item">ProdutoItemActivity</string>
     <string name="lb_proximo">Próximo</string>
     <string name="title_activity_pedido">PedidoActivity</string>
@@ -122,4 +109,20 @@
     <string name="lb_nao_selecionado">Não selecionado</string>
     <string name="lb_total_pedido">Total do pedido</string>
     <string name="title_activity_meus_pedidos">MeusPedidosActivity</string>
+    <string name="title_activity_cadastro_cliente">CadastroClienteActivity</string>
+    <string name="lb_cadastrar">Cadastrar-se</string>
+    <string name="lb_endereco">Endereço</string>
+    <string name="lb_contato">Contato</string>
+    <string name="lb_itens">Adicional</string>
+    <string name="lb_total">Total</string>
+    <string name="lb_produto">Produto</string>
+    <string name="ds_iv_imagem_produto">Imagem do produto</string>
+    <string name="ds_add_favoritos">Adicionar aos favoritos</string>
+    <string name="title_activity_classificar">ClassificarActivity</string>
+    <string name="lb_mn_pedidos_abertos">Pedidos abertos</string>
+    <string name="lb_mn_pedidos_fechados">Pedidos fechados</string>
+    <string name="title_activity_classificacao">ClassificacaoActivity</string>
+    <string name="lb_ds_classificacao">Classificação produto</string>
+    <string name="title_activity_produtos_pedido">ProdutosPedidoActivity</string>
+    <string name="lb_ds_produto_avaliar">Clique para avaliar</string>
 </resources>

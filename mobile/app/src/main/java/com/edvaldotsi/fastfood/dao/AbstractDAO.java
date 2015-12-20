@@ -16,6 +16,8 @@ import java.util.List;
  */
 public abstract class AbstractDAO<O> extends SQLiteOpenHelper {
 
+    protected Context mContext;
+
     protected String table = "";
 
     private Resources res;
@@ -25,6 +27,7 @@ public abstract class AbstractDAO<O> extends SQLiteOpenHelper {
 
     public AbstractDAO(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        mContext = context;
         res = context.getResources();
     }
 
@@ -33,6 +36,8 @@ public abstract class AbstractDAO<O> extends SQLiteOpenHelper {
         db.execSQL(res.getString(R.string.SQL_CREATE_TABLE_CLIENTE));
         db.execSQL(res.getString(R.string.SQL_CREATE_TABLE_CIDADE));
         db.execSQL(res.getString(R.string.SQL_CREATE_TABLE_CONTATO));
+        db.execSQL(res.getString(R.string.SQL_CREATE_TABLE_PRODUTO));
+        db.execSQL(res.getString(R.string.SQL_CREATE_TABLE_PRODUTO_ITEM));
     }
 
     @Override

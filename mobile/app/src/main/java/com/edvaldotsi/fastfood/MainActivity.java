@@ -4,9 +4,13 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,6 +47,8 @@ public class MainActivity extends ToolbarActivity {
 
     private Cliente cliente;
 
+    private FloatingActionButton fabCarrinho;
+
     private NavigationDrawerFragment navigation;
 
     private ImageView ivPerfil;
@@ -67,15 +73,29 @@ public class MainActivity extends ToolbarActivity {
             cliente = ContaDAO.getCliente();
 
             String imagem = getResources().getString(R.string.server_host) + cliente.getImagem();
-            Picasso.with(this).load(imagem).error(R.drawable.sem_imagem).resize(140, 140).centerCrop().transform(new CircleTransform()).into(ivPerfil);
+            Picasso.with(this).load(imagem).error(R.drawable.cliente_sem_imagem).resize(140, 140).centerCrop().transform(new CircleTransform()).into(ivPerfil);
             tvPerfilNome.setText(cliente.getNome());
             tvPerfilEmail.setText(cliente.getEmail());
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }
 
+        try { // Tenta iniciar o serviço de verificação do pedido
+            startService(new Intent(this, PedidoService.class));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         settings = getSharedPreferences("cliente", 0);
-        PedidoActivity.carrinho = new Carrinho(new Pedido(ContaDAO.getCliente()), null);
+        PedidoActivity.carrinho = new Carrinho(new Pedido(ContaDAO.getCliente()));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        int size = PedidoActivity.carrinho.getDetalhes().size();
+        fabCarrinho.setVisibility((size > 0 ? View.VISIBLE : View.GONE));
     }
 
     private void init() {
@@ -92,11 +112,9 @@ public class MainActivity extends ToolbarActivity {
                         telaConta();
                         break;
                     case 1:
-                        Intent i = new Intent(MainActivity.this, ContaActivity.class);
-                        i.putExtra("tabIndex", 1);
-                        startActivity(i);
+                        startActivity(new Intent(MainActivity.this, MeusPedidosActivity.class));
                         break;
-                    case 4:
+                    case 2:
                         sair();
                         break;
                 }
@@ -111,6 +129,8 @@ public class MainActivity extends ToolbarActivity {
         editor.remove("senha");
         editor.apply();
         editor.commit();
+
+        ContaDAO.setCliente(null);
         finish();
     }
 
@@ -123,6 +143,15 @@ public class MainActivity extends ToolbarActivity {
         tvPerfilNome = (TextView) findViewById(R.id.tvPerfilNome);
         tvPerfilEmail = (TextView) findViewById(R.id.tvPerfilEmail);
         rvProduto = (RecyclerView) findViewById(R.id.rv_produto);
+        //rvProduto = getRecyclerView(R.id.rv_produto);
+
+        fabCarrinho = (FloatingActionButton) findViewById(R.id.fab_carrinho);
+        fabCarrinho.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finalizarPedido();
+            }
+        });
     }
 
     private void telaDetalhes(Produto p) {
@@ -133,7 +162,7 @@ public class MainActivity extends ToolbarActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
+        setIntent(intent);
         if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
@@ -149,49 +178,28 @@ public class MainActivity extends ToolbarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView;
+        MenuItem item = menu.findItem(R.id.action_search);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            searchView = (SearchView) item.getActionView();
+        } else {
+            searchView = (SearchView) MenuItemCompat.getActionView(item);
+        }
+        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.actPesquisa:
-                onSearchRequested();
-                break;
-
-            case R.id.action_finalizar:
-                finalizarPedido();
-                break;
-        }
-
         return true;
     }
 
     private void finalizarPedido() {
 
         startActivity(new Intent(this, PedidoActivity.class));
-
-        /*
-        PostData data = new PostData();
-        data.put("data", gson.toJson(carrinho));
-        System.out.println(gson.toJson(carrinho));
-
-        ServerRequest request = new ServerRequest(this, new ServerRequest.RequestListener() {
-            @Override
-            public void onResponseSuccess(ServerResponse response) {
-                carrinho = new Carrinho(new Pedido(cliente), null);
-                showMessage("Pedido finalizado e enviado");
-            }
-
-            @Override
-            public void onResponseError(ServerResponse response) {}
-
-            @Override
-            public void onRequestError(ServerResponse response) {}
-        }, ServerRequest.METHOD_POST);
-        request.send("/pedidos", data);
-        */
     }
 
     @Override
@@ -225,17 +233,13 @@ public class MainActivity extends ToolbarActivity {
 
         private String[] titles = {
                 "Minha conta",
-                "Meus endereços",
-                "Meus favoritos",
-                "Configurações",
+                "Meus pedidos",
                 "Sair"
         };
         private int[] images = {
                 R.drawable.ic_conta,
-                R.drawable.ic_endereco,
                 R.drawable.ic_favorito,
-                R.drawable.ic_configuracao,
-                R.drawable.ic_conta
+                R.drawable.ic_sair
         };
 
         public NavigationAdapter(Context context, NavigationDrawerFragment navigation) {

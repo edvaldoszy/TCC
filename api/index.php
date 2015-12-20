@@ -15,6 +15,7 @@ use Szy\Mvc\Route;
 
 define('BASE_PATH', __DIR__);
 define('PUBLIC_PATH', BASE_PATH);
+define('BASE_SYSTEM_PATH', dirname(BASE_PATH));
 
 /**
  * Change current directory

@@ -27,7 +27,7 @@ public class ProdutoItemAdapter extends AbstractAdapter<ProdutoItemAdapter.ViewH
         holder.tvNome.setText(item.getNome());
         holder.tvValor.setText("R$ " + Helper.formatNumber(item.getValor()));
         holder.tvQuantidade.setText(String.valueOf(item.getQuantidade()));
-        holder.tvAdicional.setText(item.isAdicional() ? "Adicional" : "");
+        holder.tvAdicional.setText(item.isAdicional() ? "Adicional" : "Composição");
 
         holder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override

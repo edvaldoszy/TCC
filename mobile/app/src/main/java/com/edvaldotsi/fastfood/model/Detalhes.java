@@ -8,10 +8,19 @@ import java.util.List;
  */
 public class Detalhes implements Serializable {
 
+    private int codigo;
     private Produto produto;
     private List<ProdutoItem> itens;
     private int quantidade = 1;
     private float valor = 0;
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
 
     public Produto getProduto() {
         return produto;
@@ -46,10 +55,27 @@ public class Detalhes implements Serializable {
     }
 
     public float getValorTotal() {
-        return (valor + produto.getValor()) * quantidade;
+        return (getValorProduto() + getValorItens()) * quantidade;
     }
 
     public float getValor() {
+        return valor;
+    }
+
+    public float getValorProduto() {
+        return produto.getValor();
+    }
+
+    public float getValorItens() {
+        float valor = 0;
+        for (ProdutoItem p : itens) {
+            if (p.isAdicional()) {
+                valor += p.getQuantidade() * p.getValor();
+            } else {
+                valor += (p.getQuantidade() > 0 ? p.getQuantidade() - 1 : 0) * p.getValor();
+            }
+        }
+
         return valor;
     }
 

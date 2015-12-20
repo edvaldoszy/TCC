@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.edvaldotsi.fastfood.ClassificarActivity"
+    android:orientation="vertical">
+
+    <include android:id="@+id/toolbar_main" layout="@layout/toolbar_main" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        style="@style/Theme.FastFood.Activity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/nota_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star_off"
+                android:contentDescription="@string/lb_ds_classificacao"
+                android:onClick="nota1"/>
+
+            <ImageButton
+                android:id="@+id/nota_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star_off"
+                android:contentDescription="@string/lb_ds_classificacao"
+                android:onClick="nota2"/>
+
+            <ImageButton
+                android:id="@+id/nota_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star_off"
+                android:contentDescription="@string/lb_ds_classificacao"
+                android:onClick="nota3"/>
+
+            <ImageButton
+                android:id="@+id/nota_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star_off"
+                android:contentDescription="@string/lb_ds_classificacao"
+                android:onClick="nota4"/>
+
+            <ImageButton
+                android:id="@+id/nota_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star_off"
+                android:contentDescription="@string/lb_ds_classificacao"
+                android:onClick="nota5"/>
+
+        </LinearLayout>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/ed_obs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:lines="6"/>
+
+    </LinearLayout>
+
+</LinearLayout>

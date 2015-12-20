@@ -15,4 +15,10 @@ class IndexController extends AdminController
     {
         $this->response->sendRedirect('/pedidos/abertos');
     }
+
+    public function phpinfoAction()
+    {
+        phpinfo();
+        exit;
+    }
 }

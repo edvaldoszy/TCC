@@ -3,7 +3,9 @@
 namespace Application\Controller;
 
 use Application\Helper\EmailValidator;
+use Application\Helper\Message;
 use Application\Helper\RegexValidator;
+use Application\View\ApplicationView;
 use Szy\Mvc\Controller\AbstractController;
 
 abstract class AdminController extends AbstractController
@@ -29,11 +31,48 @@ abstract class AdminController extends AbstractController
     public function init()
     {
         if (!$this->logado()) {
-            $this->response->sendRedirect('/login');
+            $redirect = $this->request->getRequestUri();
+            $this->response->sendRedirect('/login?redirect=' . $redirect);
             exit;
         }
 
         $this->usuario = $this->getSession()->read('usuario');
+    }
+
+    public function sessionAction($clear = null)
+    {
+        if (!empty($clear))
+            $this->getSession()->delete('produto_imagens');
+
+        var_dump($this->getSession());
+    }
+
+    /**
+     * @param Message $message
+     */
+    protected function setSessionMessage(Message $message)
+    {
+        $this->getSession()->write('message', $message);
+    }
+
+    /**
+     * @return Message
+     */
+    public function getSessionMessage()
+    {
+        return $this->getSession()->read('message');
+    }
+
+    protected function permissao()
+    {
+        if ($this->usuario->admin != '1') {
+            $view = new ApplicationView($this, 'usuario/permissao');
+            $view->setTitle('Usuário sem permissão');
+            $view->setMessage(new Message('Usuário sem permissão para realizar esta ação', Message::TYPE_DANGER));
+            $view->flush();
+            return false;
+        }
+        return true;
     }
 
     protected function getNome()

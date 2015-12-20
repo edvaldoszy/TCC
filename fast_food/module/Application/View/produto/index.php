@@ -1,5 +1,5 @@
 <section class="content-header">
-	<h1>Produtos <a class="btn btn-primary btn-sm" href="<?= $this->url . '/cadastrar' ?>">Cadastrar</a></h1>
+	<h1>Produtos <a class="btn btn-primary btn-sm" href="/estoque/produtos/cadastrar">Cadastrar</a></h1>
 	<ol class="breadcrumb">
 		<li><a href="#"><i class="fa fa-edit"></i> Produtos</a></li>
 		<li class="active">Listagem</li>
@@ -28,8 +28,9 @@
 						<td>
 							<?= $produto->nome ?>
 							<div class="actions">
-								<a href="<?= $this->url . '/alterar/' . $produto->codigo ?>">Alterar</a> |
-								<a href="<?= $this->url . '/excluir/' . $produto->codigo ?>" onclick="return confirm('Deseja realmente excluir este produto?')">Excluir</a>
+								<a href="<?= '/estoque/produtos/alterar/' . $produto->codigo ?>">Alterar</a> |
+								<a href="<?= '/estoque/produtos/composicao/' . $produto->codigo ?>">Composição</a> |
+								<a href="<?= '/estoque/produtos/excluir/' . $produto->codigo ?>" onclick="return confirm('Deseja realmente excluir este produto?')">Excluir</a>
 							</div>
 						</td>
 						<td><?= $produto->categoria ?></td>

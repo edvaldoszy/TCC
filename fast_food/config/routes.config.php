@@ -7,7 +7,11 @@ return array(
     ),
 
     "/estoque/itens" => array(
-        "controller" => 'Application\Controller\ProdutoController'
+        "controller" => 'Application\Controller\ItemController'
+    ),
+
+    "/estoque/produtos/composicao" => array(
+        "controller" => 'Application\Controller\ComposicaoController'
     ),
 
     "/estoque/produtos" => array(
@@ -19,7 +23,7 @@ return array(
     ),
 
     "/clientes" => array(
-        "controller" => 'Application\Controller\ClientesController'
+        "controller" => 'Application\Controller\ClienteController'
     ),
 
     "/usuarios" => array(

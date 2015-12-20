@@ -2,12 +2,10 @@
 
 namespace FastFood\Controller;
 
-use Szy\Mvc\Controller\AbstractController;
-
-class IndexController extends AbstractController
+class IndexController extends AdminController
 {
     public function indexAction()
     {
-        echo 'index';
+        $this->response->write('index');
     }
 }

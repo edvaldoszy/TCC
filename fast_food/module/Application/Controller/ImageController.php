@@ -16,7 +16,7 @@ class ImageController extends AbstractController
         $w = $this->request->getParam('w');
         $h = $this->request->getParam('h');
 
-        $path = PUBLIC_PATH . $this->getRequest()->getParam('path');
+        $path = PUBLIC_PATH . '/upload/' . $this->getParam('path');
         $image = new ImageResize($path);
         if (!empty($w) && !empty($h))
             $image->crop($w, $h, true);

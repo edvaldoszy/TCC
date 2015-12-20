@@ -1,34 +1,29 @@
 package com.edvaldotsi.fastfood.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Edvaldo on 09/11/2015.
  */
-public class Carrinho {
-
-    private Endereco endereco;
+public class Carrinho implements Serializable {
 
     private Pedido pedido;
     private List<Detalhes> detalhes;
 
-    public Carrinho(Pedido pedido, Endereco endereco) {
+    public Carrinho(Pedido pedido) {
         this.pedido = pedido;
-        this.endereco = endereco;
         detalhes = new ArrayList<>();
+    }
+
+    public Carrinho(Pedido pedido, List<Detalhes> detalhes) {
+        this.pedido = pedido;
+        this.detalhes = detalhes;
     }
 
     public void addProduto(Detalhes detalhe) {
         detalhes.add(detalhe);
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
     }
 
     public Pedido getPedido() {

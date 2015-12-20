@@ -6,8 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
-
 /**
  * Created by Edvaldo on 23/08/2015.
  */
@@ -43,11 +41,11 @@ public class ServerResponse {
     }
 
     public String getMessage() {
-        return message;
+        return message == null ? "NO MESSAGE" : message;
     }
 
     public String getOutput() {
-        return output;
+        return output == null ? "NO OUTPUT" : output;
     }
 
     private JSONObject parse() throws JSONException {

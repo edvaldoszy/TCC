@@ -11,6 +11,12 @@ public class Contato implements Serializable {
     private String telefone;
     private transient Cliente cliente;
 
+    public Contato() {}
+
+    public Contato(String telefone) {
+        this.telefone = telefone;
+    }
+
     public int getCodigo() {
         return codigo;
     }

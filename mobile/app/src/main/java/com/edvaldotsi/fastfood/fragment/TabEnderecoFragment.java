@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.edvaldotsi.fastfood.EnderecoActivity;
 import com.edvaldotsi.fastfood.R;
+import com.edvaldotsi.fastfood.ToolbarActivity;
 import com.edvaldotsi.fastfood.adapter.EnderecoAdapter;
 import com.edvaldotsi.fastfood.dao.ContaDAO;
 import com.edvaldotsi.fastfood.model.Endereco;
@@ -135,11 +136,15 @@ public class TabEnderecoFragment extends Fragment {
                     }
 
                     @Override
-                    public void onResponseError(ServerResponse response) {}
+                    public void onResponseError(ServerResponse response) {
+                        ((ToolbarActivity) activity).onResponseError(response);
+                    }
 
                     @Override
-                    public void onRequestError(ServerResponse response) {}
-                }, ServerRequest.METHOD_DELET);
+                    public void onRequestError(ServerResponse response) {
+                        ((ToolbarActivity) activity).onRequestError(response);
+                    }
+                }, ServerRequest.METHOD_DELETE);
                 String path = "/clientes/" + ContaDAO.getCliente().getCodigo() + "/enderecos/" + endereco.getCodigo();
                 request.send(path);
             }

@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 	<meta charset="utf-8">
-	<base href="<?= \Szy\Mvc\Application::getConfig('server_name') ?>">
+	<base href="<?= '//' . $_SERVER['SERVER_NAME'] ?>">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title><?= $this->getTitle(); ?> - FastFood</title>
 	<!-- Tell the browser to be responsive to screen width -->

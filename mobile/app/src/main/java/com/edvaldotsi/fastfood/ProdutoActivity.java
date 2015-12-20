@@ -45,7 +45,6 @@ public class ProdutoActivity extends ToolbarActivity {
         } catch (NullPointerException ex) {
 
             try {
-
                 detalhes = (Detalhes) getIntent().getSerializableExtra("detalhes");
                 createAdater();
                 edicao = true; // Define se o produto aberto está para edução

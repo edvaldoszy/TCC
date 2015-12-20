@@ -1,5 +1,7 @@
 package com.edvaldotsi.fastfood.request;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
 /**
@@ -10,13 +12,19 @@ public class PostData extends HashMap<String, String> {
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
-        for (String name : keySet()) {
-            if (out.length() > 0)
-                out.append("&");
 
-            out.append(name);
-            out.append("=");
-            out.append(get(name));
+        try {
+            for (String name : keySet()) {
+                if (out.length() > 0)
+                    out.append("&");
+
+                out.append(name);
+                out.append("=");
+                //out.append(get(name));
+                out.append(URLEncoder.encode(get(name), "UTF-8"));
+            }
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
         }
 
         return out.toString();

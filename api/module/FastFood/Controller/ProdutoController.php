@@ -6,10 +6,10 @@ use FastFood\Helper\JSONResponse;
 use FastFood\Model;
 use FastFood\Model\ProdutoModel;
 use Szy\Database\PDOConnection;
-use Szy\Mvc\Controller\AbstractController;
+use Szy\Http\Request;
 use Szy\Mvc\Controller\Controller;
 
-class ProdutoController extends AbstractController
+class ProdutoController extends AdminController
 {
     /**
      * @var ProdutoModel
@@ -18,6 +18,7 @@ class ProdutoController extends AbstractController
 
     public function init()
     {
+        parent::init();
         $this->model = new ProdutoModel();
     }
 
@@ -30,6 +31,36 @@ class ProdutoController extends AbstractController
         $json->set('itens', $this->model->itens($produto));
 
         $json->flush();
+    }
+
+    public function votarAction($cliente, $produto, $nota)
+    {
+        if (!$this->isMethod(Request::METHOD_POST)) {
+            $this->response->setStatus(400);
+            return;
+        }
+
+        $model = new ProdutoModel();
+        $produto = $model->row('produto', null, 'codigo = ?', array($produto));
+        $cliente = $model->row('cliente', null, 'codigo = ?', array($cliente));
+        if ($produto == null || $cliente == null || !preg_match('/[1-5]+/', $nota)) {
+            $this->response->setStatus(400);
+            return;
+        }
+
+        $obs = $this->getPost('obs', FILTER_SANITIZE_STRING);
+
+        try {
+            $model->insert('classificacao', array(
+                'cliente' => $cliente->codigo,
+                'produto' => $produto->codigo,
+                'nota' => $nota,
+                'obs' => $obs
+            ));
+            $this->response->setStatus(200);
+        } catch (\Exception $ex) {
+            $this->response->setStatus(500, 'Voce ja votou neste produto');
+        }
     }
 
     public function indexAction($codigo = null)
@@ -52,21 +83,23 @@ class ProdutoController extends AbstractController
         $busca = $this->getParam('busca', FILTER_SANITIZE_STRING);
         if (!empty($busca)) {
 
-            $stmt = $model->query("SELECT po.*, mi.caminho AS imagem FROM produto po
+            $stmt = $model->query("SELECT po.*, mi.caminho AS imagem, COALESCE((SUM(ca.nota) / COUNT(ca.nota)), 0) as nota FROM produto po
             LEFT JOIN midia mi ON (mi.produto = po.codigo)
-            WHERE po.tipo = 2 AND po.nome LIKE ?", array("%{$busca}%"));
+            LEFT JOIN classificacao ca ON (ca.produto = po.codigo)
+            WHERE po.tipo = 2 AND po.nome LIKE ? GROUP BY po.codigo ORDER BY nota DESC LIMIT 30", array("%{$busca}%"));
 
         } else { // Se a busca é sem filtros
 
-            $stmt = $model->query("SELECT po.*, mi.caminho AS imagem FROM produto po
+                $stmt = $model->query("SELECT po.*, mi.caminho AS imagem, COALESCE((SUM(ca.nota) / COUNT(ca.nota)), 0) as nota FROM produto po
             LEFT JOIN midia mi ON (mi.produto = po.codigo)
-            WHERE po.tipo = 2");
+            LEFT JOIN classificacao ca ON (ca.produto = po.codigo)
+            WHERE po.tipo = 2 GROUP BY po.codigo ORDER BY nota DESC LIMIT 30");
         }
 
         $con = $model->getConnection();
         $stmtDesc = $con->prepare("SELECT po.nome FROM produto_item pt
             INNER JOIN produto po ON (po.codigo = pt.item)
-            WHERE po.tipo = 1 AND pt.produto = ?");
+            WHERE po.tipo = 1 AND pt.produto = ? AND pt.adicional = 0");
 
         $res = new \ArrayIterator();
         while ($row = $stmt->fetchObject()) {
